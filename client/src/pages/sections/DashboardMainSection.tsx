@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { format } from "date-fns";
 import { CalendarIcon, SearchIcon } from "lucide-react";
 import {
   Avatar,
@@ -14,8 +16,6 @@ import { Input } from "@/components/ui/input";
 import { 
   Area, 
   AreaChart, 
-  Bar, 
-  BarChart, 
   CartesianGrid, 
   ResponsiveContainer, 
   Tooltip, 
@@ -23,8 +23,17 @@ import {
   YAxis,
   PieChart,
   Pie,
-  Cell
+  Cell,
+  BarChart,
+  Bar
 } from "recharts";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { DateRange } from "react-day-picker";
 
 const statsCards = [
   {
@@ -133,6 +142,11 @@ const userOverviewData = [
 ];
 
 export const DashboardMainSection = (): JSX.Element => {
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: new Date(2025, 9, 2),
+    to: new Date(2025, 9, 18),
+  });
+
   return (
     <div className="flex flex-col gap-6 w-full">
       <header className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 w-full">
@@ -208,12 +222,36 @@ export const DashboardMainSection = (): JSX.Element => {
             <CardTitle className="[font-family:'Poppins',Helvetica] font-semibold text-[#222f36] text-xl tracking-[-0.20px] leading-7">
               Sales Revenue
             </CardTitle>
-            <div className="flex items-center gap-[5px] px-3 py-2 bg-white rounded-[5px] border-[0.5px] border-[#7a838e]">
-              <CalendarIcon className="w-4 h-4 text-[#7b848f]" />
-              <span className="[font-family:'Poppins',Helvetica] font-normal text-[#7b848f] text-xs">
-                2 Oct to 18 Oct , 2025
-              </span>
-            </div>
+            <Popover>
+              <PopoverTrigger asChild>
+                <div className="flex items-center gap-[5px] px-3 py-2 bg-white rounded-[5px] border-[0.5px] border-[#7a838e] cursor-pointer hover:bg-gray-50 transition-colors">
+                  <CalendarIcon className="w-4 h-4 text-[#7b848f]" />
+                  <span className="[font-family:'Poppins',Helvetica] font-normal text-[#7b848f] text-xs">
+                    {date?.from ? (
+                      date.to ? (
+                        <>
+                          {format(date.from, "d MMM")} to {format(date.to, "d MMM , yyyy")}
+                        </>
+                      ) : (
+                        format(date.from, "d MMM , yyyy")
+                      )
+                    ) : (
+                      <span>Pick a date</span>
+                    )}
+                  </span>
+                </div>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="end">
+                <Calendar
+                  initialFocus
+                  mode="range"
+                  defaultMonth={date?.from}
+                  selected={date}
+                  onSelect={setDate}
+                  numberOfMonths={2}
+                />
+              </PopoverContent>
+            </Popover>
           </CardHeader>
           <CardContent className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
