@@ -25,7 +25,9 @@ import {
   Pie,
   Cell,
   BarChart,
-  Bar
+  Bar,
+  Line,
+  LineChart
 } from "recharts";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -420,13 +422,19 @@ export const DashboardMainSection = (): JSX.Element => {
           </CardHeader>
           <CardContent className="h-[250px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={dauData}>
+              <AreaChart data={dauData}>
+                <defs>
+                  <linearGradient id="colorDau" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#62a230" stopOpacity={0.1}/>
+                    <stop offset="95%" stopColor="#62a230" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#edf1f3" />
                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#666', fontSize: 10}} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: '#666', fontSize: 10}} />
+                <YAxis axisLine={false} tickLine={false} tick={{fill: '#666', fontSize: 10}} tickFormatter={(value) => `${value}k`} />
                 <Tooltip />
-                <Bar dataKey="value" fill="#62a230" radius={[4, 4, 0, 0]} />
-              </BarChart>
+                <Area type="monotone" dataKey="value" stroke="#62a230" strokeWidth={2} fillOpacity={1} fill="url(#colorDau)" />
+              </AreaChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
