@@ -1,78 +1,98 @@
-import {
-  LayoutDashboard,
-  Users,
-  Store,
-  FileText,
-  CreditCard,
-  Settings,
-  HelpCircle,
-  LogOut,
-  ChevronRight,
-} from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Link, useLocation } from "wouter";
 
-interface SidebarProps {
-  className?: string;
+interface MenuItem {
+  title: string;
+  url: string;
+  icon: string;
 }
 
-const menuItems = [
-  { icon: LayoutDashboard, label: "Dashboard", active: true },
-  { icon: Users, label: "Users", active: false },
-  { icon: Store, label: "Vendors", active: false },
-  { icon: FileText, label: "Posts", active: false },
-  { icon: CreditCard, label: "Revenue", active: false },
-  { icon: Settings, label: "Settings", active: false },
+const mainMenuItems: MenuItem[] = [
+  {
+    title: "Dashboard",
+    url: "/",
+    icon: "/figmaAssets/frame-1171275704-3.svg",
+  },
+  {
+    title: "Users",
+    url: "/users",
+    icon: "/figmaAssets/frame-1171275705.svg",
+  },
+  {
+    title: "Vendors",
+    url: "/vendors",
+    icon: "/figmaAssets/frame-1171275704-1.svg",
+  },
+  {
+    title: "Posts",
+    url: "/posts",
+    icon: "/figmaAssets/frame-1171275704.svg",
+  },
+  {
+    title: "Revenue",
+    url: "/revenue",
+    icon: "/figmaAssets/frame-1171275704-2.svg",
+  },
+  {
+    title: "Settings",
+    url: "/settings",
+    icon: "/figmaAssets/frame-1171275704-4.svg",
+  },
 ];
 
-const secondaryItems = [
-  { icon: HelpCircle, label: "Help & Support" },
-  { icon: LogOut, label: "Logout" },
-];
+export function Sidebar({ className }: { className?: string }) {
+  const [location] = useLocation();
 
-export function Sidebar({ className }: SidebarProps) {
   return (
-    <div className={cn("flex flex-col h-full bg-white border-r border-[#edf1f3] py-8", className)}>
-      <div className="px-6 mb-10 flex items-center gap-2">
-        <div className="w-8 h-8 bg-frame-4 rounded-lg flex items-center justify-center text-white font-bold">
-          IJP
-        </div>
-        <span className="font-semibold text-xl text-total-sales">Admin</span>
+    <aside className={cn("w-[271px] bg-white h-screen flex flex-col border-r border-[#edf1f3]", className)}>
+      <div className="p-[37px_30px_20px_30px]">
+        <img
+          src="/figmaAssets/component-6.png"
+          alt="IJP Admin Logo"
+          className="w-full h-auto"
+        />
       </div>
 
-      <nav className="flex-1 px-4 space-y-2">
-        <p className="px-4 text-[10px] font-semibold text-title uppercase tracking-wider mb-4 opacity-50">
-          Main Menu
-        </p>
-        {menuItems.map((item) => (
-          <button
-            key={item.label}
-            className={cn(
-              "w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200",
-              item.active
-                ? "bg-frame-4 text-white shadow-lg shadow-frame-4/20"
-                : "text-title hover:bg-[#f5f6fa]"
-            )}
-          >
-            <div className="flex items-center gap-3">
-              <item.icon className="w-5 h-5" />
-              <span className="font-medium text-sm">{item.label}</span>
-            </div>
-            {item.active && <ChevronRight className="w-4 h-4" />}
-          </button>
-        ))}
+      <nav className="flex-1 px-4 py-4 space-y-1">
+        {mainMenuItems.map((item) => {
+          const isActive = location === item.url;
+          return (
+            <Link key={item.title} href={item.url}>
+              <a
+                className={cn(
+                  "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group",
+                  isActive
+                    ? "bg-[#62a230] text-white shadow-[0px_4px_12px_rgba(98,162,48,0.2)]"
+                    : "text-[#7a838e] hover:bg-[#f5f6fa] hover:text-[#222f36]"
+                )}
+              >
+                <img 
+                  src={item.icon} 
+                  alt={item.title} 
+                  className={cn(
+                    "w-5 h-5",
+                    isActive ? "brightness-0 invert" : "opacity-70 group-hover:opacity-100"
+                  )} 
+                />
+                <span className="font-medium text-sm [font-family:'Poppins',Helvetica]">
+                  {item.title}
+                </span>
+              </a>
+            </Link>
+          );
+        })}
       </nav>
 
-      <div className="px-4 mt-auto pt-8 border-t border-[#edf1f3]">
-        {secondaryItems.map((item) => (
-          <button
-            key={item.label}
-            className="w-full flex items-center gap-3 px-4 py-3 text-title hover:bg-[#f5f6fa] rounded-xl transition-all duration-200"
-          >
-            <item.icon className="w-5 h-5 opacity-70" />
-            <span className="font-medium text-sm">{item.label}</span>
-          </button>
-        ))}
+      <div className="p-6 mt-auto border-t border-[#edf1f3]">
+        <button className="flex items-center gap-3 px-4 py-3 w-full text-[#7a838e] hover:text-[#ef4343] transition-colors group">
+          <img 
+            src="/figmaAssets/item---link.svg" 
+            alt="Logout" 
+            className="w-5 h-5 opacity-70 group-hover:opacity-100" 
+          />
+          <span className="font-medium text-sm [font-family:'Poppins',Helvetica]">Logout</span>
+        </button>
       </div>
-    </div>
+    </aside>
   );
 }
