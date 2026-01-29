@@ -47,19 +47,20 @@ export function Sidebar({ className }: { className?: string }) {
   return (
     <aside className={cn("w-[280px] bg-[#003829] h-[calc(100vh-32px)] m-4 flex flex-col rounded-[24px] overflow-hidden text-white/70", className)}>
       {/* Checkered Header Section */}
-      <div className="relative pt-12 pb-8 flex flex-col items-center">
-        <div className="absolute inset-0 opacity-10 pointer-events-none" 
+      <div className="relative pt-8 pb-4 flex flex-col items-center">
+        <div className="absolute top-0 left-0 w-full h-24 opacity-20 pointer-events-none" 
              style={{
-               backgroundImage: `radial-gradient(#ffffff 1px, transparent 1px)`,
-               backgroundSize: '20px 20px'
+               backgroundImage: `linear-gradient(45deg, #ffffff 25%, transparent 25%, transparent 75%, #ffffff 75%, #ffffff), linear-gradient(45deg, #ffffff 25%, transparent 25%, transparent 75%, #ffffff 75%, #ffffff)`,
+               backgroundSize: '24px 24px',
+               backgroundPosition: '0 0, 12px 12px'
              }}>
         </div>
         
-        <div className="relative z-10 w-32 h-32 bg-white rounded-full p-2 shadow-xl mb-6">
+        <div className="relative z-10 w-28 h-28 bg-white rounded-full p-1 shadow-lg mb-4 mt-2">
           <img
             src="/figmaAssets/component-6.png"
             alt="IJustPaid Logo"
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain rounded-full"
           />
         </div>
       </div>
