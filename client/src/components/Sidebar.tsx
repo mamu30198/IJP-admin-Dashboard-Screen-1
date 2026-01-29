@@ -45,17 +45,17 @@ export function Sidebar({ className }: { className?: string }) {
   const [location] = useLocation();
 
   return (
-    <aside className={cn("w-[280px] bg-[#003829] h-[calc(100vh-32px)] m-4 flex flex-col rounded-[24px] overflow-hidden text-white/70", className)}>
+    <aside className={cn("w-[280px] bg-[#002B20] h-[calc(100vh-32px)] m-4 flex flex-col rounded-[24px] overflow-hidden text-white/70", className)}>
       {/* Checkered Header Section */}
       <div className="relative pt-12 pb-6 flex flex-col items-center">
-        <div className="absolute top-0 left-0 w-full h-[120px] pointer-events-none overflow-hidden rounded-t-[24px]">
+        <div className="absolute top-0 left-0 w-full h-[140px] pointer-events-none overflow-hidden rounded-t-[24px]">
           <div className="flex flex-wrap w-[320px]">
-            {Array.from({ length: 40 }).map((_, i) => (
+            {Array.from({ length: 64 }).map((_, i) => (
               <div 
                 key={i} 
                 className={cn(
                   "w-10 h-10",
-                  (Math.floor(i / 8) + (i % 8)) % 2 === 0 ? "bg-white/5" : "bg-transparent"
+                  (Math.floor(i / 8) + (i % 8)) % 2 === 0 ? "bg-white/[0.04]" : "bg-transparent"
                 )}
               />
             ))}
@@ -85,12 +85,12 @@ export function Sidebar({ className }: { className?: string }) {
                     className={cn(
                       "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group",
                       isActive
-                        ? "bg-[#21c45d] text-white font-semibold"
-                        : "hover:bg-white/5 hover:text-white"
+                        ? "bg-[#21c45d] text-white font-medium"
+                        : "text-white/60 hover:text-white hover:bg-white/5"
                     )}
                   >
-                    <item.icon className={cn("w-[18px] h-[18px]", isActive ? "text-white" : "text-white/60 group-hover:text-white")} />
-                    <span className="text-[14px] [font-family:'Poppins',Helvetica]">
+                    <item.icon className={cn("w-5 h-5", isActive ? "text-white" : "text-white/40 group-hover:text-white")} />
+                    <span className="text-[14px] font-medium">
                       {item.title}
                     </span>
                   </a>
@@ -107,9 +107,9 @@ export function Sidebar({ className }: { className?: string }) {
           <nav className="space-y-1">
             {otherMenuItems.map((item) => (
               <Link key={item.title} href={item.url}>
-                <a className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 hover:text-white transition-all duration-200 group">
-                  <item.icon className="w-[18px] h-[18px] text-white/60 group-hover:text-white" />
-                  <span className="text-[14px] [font-family:'Poppins',Helvetica]">
+                <a className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-all duration-200 group">
+                  <item.icon className="w-5 h-5 text-white/40 group-hover:text-white" />
+                  <span className="text-[14px] font-medium">
                     {item.title}
                   </span>
                 </a>
