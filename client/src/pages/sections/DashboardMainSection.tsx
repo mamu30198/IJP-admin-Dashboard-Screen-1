@@ -1,4 +1,5 @@
-import { CalendarIcon, SearchIcon } from "lucide-react";
+import { CalendarIcon, SearchIcon, ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 import {
   Avatar,
   AvatarFallback,
@@ -11,6 +12,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { format } from "date-fns";
+import { useState } from "react";
 import { 
   Area, 
   AreaChart, 
@@ -133,6 +143,8 @@ const userOverviewData = [
 ];
 
 export const DashboardMainSection = (): JSX.Element => {
+  const [date, setDate] = useState<Date | undefined>(new Date());
+
   return (
     <div className="flex flex-col gap-6 w-full">
       <header className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 w-full">
@@ -149,31 +161,29 @@ export const DashboardMainSection = (): JSX.Element => {
         </div>
 
         <div className="flex items-center gap-[19px]">
-          <div className="relative w-full lg:w-[388px]">
-            <SearchIcon className="absolute left-[17px] top-1/2 -translate-y-1/2 w-[15.61px] h-[15.61px] text-[#7b848f] opacity-50" />
-            <Input
-              placeholder="Search For Anything"
-              className="h-[38px] pl-[45px] pr-[17px] bg-white rounded-[19px] border-[0.6px] border-[#7a838e] [font-family:'Poppins',Helvetica] font-normal text-[#222f36] text-sm"
-            />
-          </div>
-
-          <button className="w-[42px] h-[34px] flex items-center justify-center bg-white rounded-lg shadow-sm">
-            <img className="w-5 h-5" alt="Notifications" src="/figmaAssets/item---link-1.svg" />
-          </button>
-
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-full shadow-sm">
-            <Avatar className="w-7 h-7">
-              <AvatarImage src="/figmaAssets/2-jpg.png" />
-              <AvatarFallback>MJ</AvatarFallback>
-            </Avatar>
-            <span className="[font-family:'Poppins',Helvetica] font-medium text-[#7b848f] text-[13.6px] tracking-[0] leading-[13.6px] whitespace-nowrap">
-              Mr. Jack
-            </span>
-          </div>
-
-          <button className="w-[42px] h-[34px] flex items-center justify-center bg-white rounded-lg shadow-sm">
-            <img className="w-5 h-5" alt="Menu" src="/figmaAssets/item---link.svg" />
-          </button>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant={"outline"}
+                className={cn(
+                  "w-[240px] justify-start text-left font-normal bg-white border-[#7a838e] rounded-[19px] h-[38px]",
+                  !date && "text-muted-foreground"
+                )}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {date ? format(date, "PPP") : <span>Pick a date</span>}
+                <ChevronDown className="ml-auto h-4 w-4 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="end">
+              <Calendar
+                mode="single"
+                selected={date}
+                onSelect={setDate}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
         </div>
       </header>
 
