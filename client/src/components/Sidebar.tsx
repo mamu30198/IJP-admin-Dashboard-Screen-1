@@ -58,7 +58,7 @@ export function Sidebar({ className }: { className?: string }) {
         
         <div className="relative z-10 w-28 h-28 bg-white rounded-full p-1 shadow-lg mb-4 mt-2">
           <img
-            src="/figmaAssets/component-6.png"
+            src="/figmaAssets/new_logo.png"
             alt="IJustPaid Logo"
             className="w-full h-full object-contain rounded-full"
           />
