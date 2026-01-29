@@ -1,7 +1,11 @@
+import { useState } from "react";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
   MoreVerticalIcon,
+  Eye,
+  Settings,
+  Trash2,
 } from "lucide-react";
 import {
   Avatar,
@@ -17,6 +21,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 const tableHeaders = [
   { label: "Name", className: "w-[191px]" },
@@ -162,6 +174,21 @@ const paginationPages = [
 ];
 
 export const UserTableSection = (): JSX.Element => {
+  const { toast } = useToast();
+  const [currentPage, setCurrentPage] = useState(2);
+  const itemsPerPage = 8;
+  const totalPages = 5;
+
+  const handleAction = (action: string, userName: string) => {
+    toast({
+      title: `${action} initiated`,
+      description: `Performing ${action.toLowerCase()} on ${userName}`,
+    });
+  };
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentUsers = userData.slice(0, itemsPerPage);
+
   return (
     <section className="flex flex-col items-start w-full">
       <div className="flex flex-col w-full items-start bg-white rounded-t-[20px] overflow-hidden">
@@ -186,7 +213,7 @@ export const UserTableSection = (): JSX.Element => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {userData.map((user, index) => (
+              {currentUsers.map((user, index) => (
                 <TableRow
                   key={index}
                   className="border-b border-[#edf1f3] h-[63px]"
@@ -236,13 +263,28 @@ export const UserTableSection = (): JSX.Element => {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-auto w-5 p-0"
-                    >
-                      <MoreVerticalIcon className="w-5 h-5" />
-                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-auto w-5 p-0"
+                        >
+                          <MoreVerticalIcon className="w-5 h-5" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-40">
+                        <DropdownMenuItem onClick={() => handleAction("View", user.name)}>
+                          <Eye className="w-4 h-4 mr-2" /> View Details
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleAction("Edit", user.name)}>
+                          <Settings className="w-4 h-4 mr-2" /> Edit User
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="text-red-600 focus:text-red-600" onClick={() => handleAction("Delete", user.name)}>
+                          <Trash2 className="w-4 h-4 mr-2" /> Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               ))}
@@ -253,11 +295,17 @@ export const UserTableSection = (): JSX.Element => {
 
       <footer className="flex items-center justify-between p-6 w-full bg-white rounded-b-[20px] border-t border-[#edf1f3]">
         <p className="opacity-70 [font-family:'Poppins',Helvetica] font-normal text-rectangle-164 text-sm tracking-[0] leading-[21px]">
-          Showing 1 to 100 list in 1 page
+          Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, 100)} list in {currentPage} page
         </p>
 
         <nav className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" className="h-auto w-10 p-0">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-auto w-10 p-0"
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+          >
             <ChevronLeftIcon className="w-5 h-5" />
           </Button>
 
@@ -265,17 +313,25 @@ export const UserTableSection = (): JSX.Element => {
             <Button
               key={index}
               variant="ghost"
-              className={`h-auto w-10 rounded-[190px] font-sub-heading-03 font-[number:var(--sub-heading-03-font-weight)] text-[length:var(--sub-heading-03-font-size)] tracking-[var(--sub-heading-03-letter-spacing)] leading-[var(--sub-heading-03-line-height)] [font-style:var(--sub-heading-03-font-style)] ${
-                page.active
+              onClick={() => setCurrentPage(index + 1)}
+              className={cn(
+                "h-auto w-10 rounded-[190px] font-medium text-sm transition-all",
+                currentPage === index + 1
                   ? "bg-frame-4 text-white hover:bg-frame-4 hover:text-white"
                   : "text-rectangle-165 hover:bg-transparent"
-              }`}
+              )}
             >
               {page.number}
             </Button>
           ))}
 
-          <Button variant="ghost" size="icon" className="h-auto w-10 p-0">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-auto w-10 p-0"
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+          >
             <ChevronRightIcon className="w-5 h-5" />
           </Button>
         </nav>
