@@ -12,6 +12,7 @@ import UserProfilePage from "@/pages/UserProfilePage";
 import AdsRevenuePage from "@/pages/AdsRevenuePage";
 import PricingSettingsPage from "@/pages/PricingSettingsPage";
 import ReportsPage from "@/pages/ReportsPage";
+import AlertsPage from "@/pages/AlertsPage";
 
 function Router() {
   return (
@@ -23,6 +24,7 @@ function Router() {
       <Route path="/revenue" component={AdsRevenuePage} />
       <Route path="/pricing" component={PricingSettingsPage} />
       <Route path="/reports" component={ReportsPage} />
+      <Route path="/alerts" component={AlertsPage} />
       <Route path="/" component={DashboardScreen} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
