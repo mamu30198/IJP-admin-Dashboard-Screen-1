@@ -24,15 +24,17 @@ interface MenuItem {
 
 const mainMenuItems: MenuItem[] = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
-  { title: "Manage Users", url: "/users", icon: Users },
-  { title: "Manage Vendors", url: "/vendors", icon: User },
-  { title: "Risk Assessment", url: "/risk", icon: ShieldCheck },
-  { title: "Fraud Alerts", url: "/alerts", icon: AlertTriangle },
-  { title: "Moderation Queue", url: "/moderation", icon: MessageSquareText },
-  { title: "Revenue Center", url: "/revenue", icon: TrendingUp },
-  { title: "System Reports", url: "/reports", icon: FileBarChart },
+  { title: "Posts & Deals", url: "/posts", icon: Tag },
+  { title: "AI Intelligence Center", url: "/ai-intelligence", icon: ShieldCheck },
+  { title: "Content Moderation", url: "/moderation", icon: MessageSquareText },
+  { title: "Ads & Revenue", url: "/revenue", icon: TrendingUp },
+  { title: "Finance & Plans", url: "/finance", icon: CreditCard },
+  { title: "Reports", url: "/reports", icon: FileBarChart },
+  { title: "System Alerts", url: "/alerts", icon: AlertTriangle },
+  { title: "Users", url: "/users", icon: Users },
   { title: "Comments", url: "/comments", icon: MessageCircle },
-  { title: "Platform Settings", url: "/settings", icon: Settings },
+  { title: "Pricing Settings", url: "/pricing", icon: Settings },
+  { title: "Admin Management", url: "/admin", icon: User },
 ];
 
 const otherMenuItems: MenuItem[] = [
@@ -44,7 +46,7 @@ export function Sidebar({ className }: { className?: string }) {
   const [location] = useLocation();
 
   return (
-    <aside className={cn("w-[280px] bg-[#002B20] h-[calc(100vh-32px)] m-4 flex flex-col rounded-[24px] overflow-hidden text-white/70", className)}>
+    <aside className={cn("w-[280px] bg-[#002B20] h-[calc(100vh-32px)] m-4 flex flex-col rounded-[24px] overflow-hidden text-white/70 transition-all duration-300", className)}>
       {/* Checkered Header Section */}
       <div className="relative pt-12 pb-6 flex flex-col items-center">
         <div className="absolute top-0 left-0 w-full h-[140px] pointer-events-none overflow-hidden rounded-t-[24px]">

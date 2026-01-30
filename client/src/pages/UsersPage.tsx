@@ -67,32 +67,32 @@ export default function UsersPage() {
     <div className="flex bg-[#f5f6fa] w-full min-h-screen">
       <Sidebar className="w-[280px] flex-shrink-0 sticky top-0" />
       
-      <main className="flex-1 p-6 overflow-x-hidden space-y-6">
+      <main className="flex-1 p-4 md:p-6 overflow-x-hidden space-y-6">
         {/* Header */}
-        <header className="flex items-center justify-between">
+        <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold text-[#222f36]">Users</h1>
-            <p className="text-sm text-[#7b848f]">Manage all users on the platform</p>
+            <h1 className="text-xl md:text-2xl font-semibold text-[#222f36]">Users</h1>
+            <p className="text-xs md:text-sm text-[#7b848f]">Manage all users on the platform</p>
           </div>
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" className="bg-white rounded-lg shadow-sm">
-              <Bell className="w-5 h-5 text-[#7b848f]" />
+          <div className="flex items-center gap-2 md:gap-4 w-full sm:w-auto justify-end">
+            <Button variant="ghost" size="icon" className="bg-white rounded-lg shadow-sm w-9 h-9 md:w-10 md:h-10">
+              <Bell className="w-4 h-4 md:w-5 md:h-5 text-[#7b848f]" />
             </Button>
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-full shadow-sm">
-              <Avatar className="w-7 h-7">
+            <div className="flex items-center gap-2 px-2 md:px-3 py-1 md:py-1.5 bg-white rounded-full shadow-sm">
+              <Avatar className="w-6 h-6 md:w-7 md:h-7">
                 <AvatarImage src="/figmaAssets/2-jpg.png" />
                 <AvatarFallback>MJ</AvatarFallback>
               </Avatar>
-              <span className="text-sm font-medium text-[#7b848f]">Mr. Jack</span>
+              <span className="text-xs md:text-sm font-medium text-[#7b848f] whitespace-nowrap">Mr. Jack</span>
             </div>
-            <Button variant="ghost" size="icon" className="bg-white rounded-lg shadow-sm">
-              <Settings className="w-5 h-5 text-[#7b848f]" />
+            <Button variant="ghost" size="icon" className="bg-white rounded-lg shadow-sm w-9 h-9 md:w-10 md:h-10">
+              <Settings className="w-4 h-4 md:w-5 md:h-5 text-[#7b848f]" />
             </Button>
           </div>
         </header>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {stats.map((stat, i) => (
             <StatCard key={i} {...stat} />
           ))}
@@ -144,19 +144,21 @@ export default function UsersPage() {
         </div>
 
         {/* Filters */}
-        <div className="flex items-center gap-4 bg-white p-2 rounded-xl shadow-sm">
-          <Button variant="ghost" className="bg-[#62a230] text-white hover:bg-[#62a230]/90">All User</Button>
-          <Button variant="ghost" className="text-[#7b848f]">Only Users</Button>
-          <Button variant="ghost" className="text-[#7b848f]">Vendors</Button>
-          <Button variant="ghost" className="text-[#7b848f]">Suspended</Button>
-          <Button variant="ghost" className="text-[#7b848f]">Blocked users</Button>
+        <div className="flex flex-col xl:flex-row xl:items-center gap-4 bg-white p-3 rounded-xl shadow-sm">
+          <div className="flex flex-wrap items-center gap-2">
+            <Button variant="ghost" className="bg-[#62a230] text-white hover:bg-[#62a230]/90 px-3 py-1 h-9 text-sm">All User</Button>
+            <Button variant="ghost" className="text-[#7b848f] px-3 py-1 h-9 text-sm">Only Users</Button>
+            <Button variant="ghost" className="text-[#7b848f] px-3 py-1 h-9 text-sm">Vendors</Button>
+            <Button variant="ghost" className="text-[#7b848f] px-3 py-1 h-9 text-sm">Suspended</Button>
+            <Button variant="ghost" className="text-[#7b848f] px-3 py-1 h-9 text-sm">Blocked users</Button>
+          </div>
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7b848f]" />
             <Input 
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by name, mobile, or city..." 
-              className="pl-10 h-10 bg-[#f8fafc] border-none rounded-lg"
+              className="pl-10 h-10 bg-[#f8fafc] border-none rounded-lg w-full"
             />
           </div>
         </div>
