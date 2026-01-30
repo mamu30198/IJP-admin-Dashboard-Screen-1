@@ -1,45 +1,39 @@
 import { useState } from "react";
 import { Sidebar } from "@/components/Sidebar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { cn } from "@/lib/utils";
-import { Search, Bell, Settings, MoreHorizontal, Filter, ChevronLeft, ChevronRight } from "lucide-react";
+import { Bell, Settings, Search } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { StatCard } from "@/components/StatCard";
+import { UserTable, User } from "@/components/UserTable";
 
 const stats = [
   { 
     title: "Total Users", 
     value: "1,234", 
-    icon: "/figmaAssets/frame-1171275705.svg",
-    bg: "bg-white" 
+    icon: "/figmaAssets/frame-1171275705.svg"
   },
   { 
     title: "Active Users", 
     value: "1,234", 
-    icon: "/figmaAssets/frame-1171275704-2.svg",
-    bg: "bg-white" 
+    icon: "/figmaAssets/frame-1171275704-2.svg"
   },
   { 
     title: "InActive Users", 
     value: "1,234", 
-    icon: "/figmaAssets/frame-1171275704-3.svg",
-    bg: "bg-white" 
+    icon: "/figmaAssets/frame-1171275704-3.svg"
   },
   { 
     title: "Total Vendors", 
     value: "1,234", 
-    icon: "/figmaAssets/frame-1171275704-1.svg",
-    bg: "bg-white" 
+    icon: "/figmaAssets/frame-1171275704-1.svg"
   },
   { 
     title: "Total User Reports", 
     value: "1,234", 
-    icon: "/figmaAssets/frame-1171275704-4.svg",
-    bg: "bg-white" 
+    icon: "/figmaAssets/frame-1171275704-4.svg"
   },
 ];
 
@@ -54,7 +48,7 @@ const chartData = [
   { name: "9 Oct", value: 190 },
 ];
 
-const users = Array.from({ length: 10 }).map((_, i) => ({
+const users: User[] = Array.from({ length: 10 }).map((_, i) => ({
   id: i,
   name: "John Doe",
   mobile: "+10895XXXX550",
@@ -100,48 +94,34 @@ export default function UsersPage() {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {stats.map((stat, i) => (
-            <div key={i} className="bg-white border-0 shadow-[0px_1px_2px_#0000000d] rounded-[15px] p-5 flex items-center justify-between">
-              <div className="space-y-1">
-                <p className="text-[11px] font-medium text-[#7b848f] uppercase tracking-wider">{stat.title}</p>
-                <p className="text-2xl font-bold text-[#222f36]">{stat.value}</p>
-              </div>
-              <div className="w-12 h-12 rounded-full flex items-center justify-center border border-[#edf1f3] bg-white">
-                <img src={stat.icon} alt={stat.title} className="w-6 h-6" />
-              </div>
-            </div>
+            <StatCard key={i} {...stat} />
           ))}
         </div>
 
         {/* Alerts & Chart */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-4 space-y-4">
-            <Card className="border-0 shadow-sm bg-[#fff5f5]">
-              <CardContent className="p-4">
-                <Badge variant="destructive" className="mb-2">VENDOR FRAUD DETECTION</Badge>
-                <p className="text-sm font-medium text-[#222f36]">Suspicious receipt patterns detected across 14 vendors</p>
-                <p className="text-xs text-[#7b848f] mt-1">9:20:00 AM</p>
-              </CardContent>
-            </Card>
-            <Card className="border-0 shadow-sm bg-[#fff9eb]">
-              <CardContent className="p-4">
-                <Badge className="mb-2 bg-[#f59f00]">VENDOR RISK</Badge>
-                <p className="text-sm font-medium text-[#222f36]">Vendor 'Autolux Parts' risk score increased to 72/100</p>
-                <p className="text-xs text-[#7b848f] mt-1">8:45:00 AM</p>
-              </CardContent>
-            </Card>
-            <Card className="border-0 shadow-sm bg-[#fff5f5]">
-              <CardContent className="p-4">
-                <Badge variant="destructive" className="mb-2">USER FRAUD DETECTION</Badge>
-                <p className="text-sm font-medium text-[#222f36]">Suspicious receipt patterns detected across 14 Users</p>
-                <p className="text-xs text-[#7b848f] mt-1">9:20:00 AM</p>
-              </CardContent>
-            </Card>
+            <div className="bg-[#fff5f5] rounded-[15px] p-4 border-0 shadow-[0px_1px_2px_#0000000d]">
+              <Badge variant="destructive" className="mb-2 uppercase text-[10px]">VENDOR FRAUD DETECTION</Badge>
+              <p className="text-sm font-medium text-[#222f36]">Suspicious receipt patterns detected across 14 vendors</p>
+              <p className="text-xs text-[#7b848f] mt-1">9:20:00 AM</p>
+            </div>
+            <div className="bg-[#fff9eb] rounded-[15px] p-4 border-0 shadow-[0px_1px_2px_#0000000d]">
+              <Badge className="mb-2 bg-[#f59f00] uppercase text-[10px]">VENDOR RISK</Badge>
+              <p className="text-sm font-medium text-[#222f36]">Vendor 'Autolux Parts' risk score increased to 72/100</p>
+              <p className="text-xs text-[#7b848f] mt-1">8:45:00 AM</p>
+            </div>
+            <div className="bg-[#fff5f5] rounded-[15px] p-4 border-0 shadow-[0px_1px_2px_#0000000d]">
+              <Badge variant="destructive" className="mb-2 uppercase text-[10px]">USER FRAUD DETECTION</Badge>
+              <p className="text-sm font-medium text-[#222f36]">Suspicious receipt patterns detected across 14 Users</p>
+              <p className="text-xs text-[#7b848f] mt-1">9:20:00 AM</p>
+            </div>
           </div>
           
           <div className="lg:col-span-8 bg-white border-0 shadow-[0px_1px_2px_#0000000d] rounded-[15px] p-6">
             <div className="flex flex-row items-center justify-between pb-4">
               <h3 className="text-lg font-semibold text-[#222f36]">Daily Active Users</h3>
-              <Badge variant="outline" className="text-[#7b848f] border-[#7b848f]">2 Oct to 18 Oct, 2025</Badge>
+              <Badge variant="outline" className="text-[#7b848f] border-[#7b848f] text-[10px] uppercase">2 Oct to 18 Oct, 2025</Badge>
             </div>
             <div className="h-[250px]">
               <ResponsiveContainer width="100%" height="100%">
@@ -181,86 +161,7 @@ export default function UsersPage() {
           </div>
         </div>
 
-        {/* Users Table */}
-        <div className="bg-white border-0 shadow-[0px_1px_2px_#0000000d] rounded-[15px] overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse bg-white">
-              <thead>
-                <tr className="bg-[#f8fafc] border-b">
-                  <th className="p-4 text-xs font-medium text-[#7b848f] uppercase">Name</th>
-                  <th className="p-4 text-xs font-medium text-[#7b848f] uppercase">Mobile</th>
-                  <th className="p-4 text-xs font-medium text-[#7b848f] uppercase">City</th>
-                  <th className="p-4 text-xs font-medium text-[#7b848f] uppercase">Registration</th>
-                  <th className="p-4 text-xs font-medium text-[#7b848f] uppercase">Activity</th>
-                  <th className="p-4 text-xs font-medium text-[#7b848f] uppercase">Reports</th>
-                  <th className="p-4 text-xs font-medium text-[#7b848f] uppercase">Status</th>
-                  <th className="p-4 text-xs font-medium text-[#7b848f] uppercase">Profile Completion</th>
-                  <th className="p-4 text-xs font-medium text-[#7b848f] uppercase"></th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {users.map((user) => (
-                  <tr key={user.id} className="hover:bg-[#f8fafc] transition-colors bg-white">
-                    <td className="p-4">
-                      <div className="flex items-center gap-3">
-                        <Avatar className="w-8 h-8">
-                          <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.id}`} />
-                          <AvatarFallback>JD</AvatarFallback>
-                        </Avatar>
-                        <span className="text-sm font-medium text-[#222f36]">{user.name}</span>
-                      </div>
-                    </td>
-                    <td className="p-4 text-sm text-[#7b848f]">{user.mobile}</td>
-                    <td className="p-4 text-sm text-[#7b848f]">{user.city}</td>
-                    <td className="p-4 text-sm text-[#7b848f]">{user.registration}</td>
-                    <td className="p-4">
-                      <span className={`text-xs font-medium ${user.activity === 'High' ? 'text-[#62a230]' : user.activity === 'Medium' ? 'text-[#f59f00]' : 'text-[#7b848f]'}`}>
-                        {user.activity}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <span className={`text-xs ${user.reports !== 'None' ? 'text-red-500 font-medium' : 'text-[#7b848f]'}`}>
-                        {user.reports}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <Badge variant="outline" className={`rounded-full ${
-                        user.status === 'Active' ? 'bg-[#e8f5e9] text-[#2e7d32] border-[#2e7d32]/20' : 
-                        user.status === 'Inactive' ? 'bg-[#f5f5f5] text-[#757575] border-[#757575]/20' : 
-                        'bg-[#ffebee] text-[#c62828] border-[#c62828]/20'
-                      }`}>
-                        {user.status}
-                      </Badge>
-                    </td>
-                    <td className="p-4">
-                      <div className="flex items-center gap-3 min-w-[120px]">
-                        <Progress value={user.completion} className="h-1.5 flex-1" />
-                        <span className="text-xs text-[#7b848f]">{user.completion}%</span>
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <Button variant="ghost" size="icon" className="text-[#7b848f]">
-                        <MoreHorizontal className="w-4 h-4" />
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="p-4 border-t flex items-center justify-between bg-white">
-            <p className="text-xs text-[#7b848f]">Showing 1 to 100 list in 1 page</p>
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon" className="w-8 h-8 rounded-lg"><ChevronLeft className="w-4 h-4" /></Button>
-              <Button variant="ghost" className="w-8 h-8 rounded-lg p-0 text-xs">01</Button>
-              <Button variant="ghost" className="w-8 h-8 rounded-lg p-0 text-xs bg-[#62a230] text-white">02</Button>
-              <Button variant="ghost" className="w-8 h-8 rounded-lg p-0 text-xs">03</Button>
-              <Button variant="ghost" className="w-8 h-8 rounded-lg p-0 text-xs">04</Button>
-              <Button variant="ghost" className="w-8 h-8 rounded-lg p-0 text-xs">05</Button>
-              <Button variant="ghost" size="icon" className="w-8 h-8 rounded-lg"><ChevronRight className="w-4 h-4" /></Button>
-            </div>
-          </div>
-        </div>
+        <UserTable users={users} />
       </main>
     </div>
   );
