@@ -48,34 +48,34 @@ import {
 
 const statsCards = [
   {
-    title: "Total Posts",
-    value: "1,234",
-    icon: "/figmaAssets/frame-1171275704-3.svg",
+    title: "Total Users",
+    value: "15,234",
+    icon: "/figmaAssets/frame-1171275705.svg",
   },
   {
-    title: "Active Users",
-    value: "1,234",
-    icon: "/figmaAssets/frame-1171275704-2.svg",
-  },
-  {
-    title: "Sponsored Posts",
-    value: "1,234",
-    icon: "/figmaAssets/frame-1171275704-4.svg",
-  },
-  {
-    title: "Total Revenue",
-    value: "1,234",
-    icon: "/figmaAssets/frame-1171275704.svg",
-  },
-  {
-    title: "Total Vendors",
-    value: "1,234",
+    title: "Active Vendors",
+    value: "1,102",
     icon: "/figmaAssets/frame-1171275704-1.svg",
   },
   {
-    title: "Total Users",
-    value: "1,234",
-    icon: "/figmaAssets/frame-1171275705.svg",
+    title: "Monthly Revenue",
+    value: "$48,234",
+    icon: "/figmaAssets/frame-1171275704.svg",
+  },
+  {
+    title: "Moderation Tasks",
+    value: "142",
+    icon: "/figmaAssets/frame-1171275704-4.svg",
+  },
+  {
+    title: "Fraud Alerts",
+    value: "28",
+    icon: "/figmaAssets/frame-1171275704-2.svg",
+  },
+  {
+    title: "System Performance",
+    value: "99.9%",
+    icon: "/figmaAssets/frame-1171275704-3.svg",
   },
 ];
 

@@ -24,16 +24,15 @@ interface MenuItem {
 
 const mainMenuItems: MenuItem[] = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
-  { title: "Posts & Deals", url: "/posts", icon: Tag },
-  { title: "AI Intelligence Center", url: "/ai-intelligence", icon: ShieldCheck },
-  { title: "Content Moderation", url: "/moderation", icon: MessageSquareText },
-  { title: "Ads & Revenue", url: "/revenue", icon: TrendingUp },
-  { title: "Finance & Plans", url: "/finance", icon: CreditCard },
-  { title: "Reports", url: "/reports", icon: FileBarChart },
-  { title: "System Alerts", url: "/alerts", icon: AlertTriangle },
-  { title: "Users", url: "/users", icon: Users },
+  { title: "Manage Users", url: "/users", icon: Users },
+  { title: "Manage Vendors", url: "/vendors", icon: User },
+  { title: "Risk Assessment", url: "/risk", icon: ShieldCheck },
+  { title: "Fraud Alerts", url: "/alerts", icon: AlertTriangle },
+  { title: "Moderation Queue", url: "/moderation", icon: MessageSquareText },
+  { title: "Revenue Center", url: "/revenue", icon: TrendingUp },
+  { title: "System Reports", url: "/reports", icon: FileBarChart },
   { title: "Comments", url: "/comments", icon: MessageCircle },
-  { title: "Pricing Settings", url: "/pricing", icon: Settings },
+  { title: "Platform Settings", url: "/settings", icon: Settings },
 ];
 
 const otherMenuItems: MenuItem[] = [
