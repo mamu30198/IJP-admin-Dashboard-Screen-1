@@ -10,6 +10,7 @@ import AuthPage from "@/pages/AuthPage";
 import UsersPage from "@/pages/UsersPage";
 import UserProfilePage from "@/pages/UserProfilePage";
 import AdsRevenuePage from "@/pages/AdsRevenuePage";
+import PricingSettingsPage from "@/pages/PricingSettingsPage";
 
 function Router() {
   return (
@@ -19,6 +20,7 @@ function Router() {
       <Route path="/users/:id" component={UserProfilePage} />
       <Route path="/users" component={UsersPage} />
       <Route path="/revenue" component={AdsRevenuePage} />
+      <Route path="/pricing" component={PricingSettingsPage} />
       <Route path="/" component={DashboardScreen} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
