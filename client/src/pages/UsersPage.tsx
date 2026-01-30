@@ -6,15 +6,41 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { cn } from "@/lib/utils";
 import { Search, Bell, Settings, MoreHorizontal, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 const stats = [
-  { title: "Total Users", value: "1,234", icon: "👥" },
-  { title: "Active Users", value: "1,234", icon: "✅" },
-  { title: "Inactive Users", value: "1,234", icon: "👤" },
-  { title: "Total Vendors", value: "1,234", icon: "🏢" },
-  { title: "Total User Reports", value: "1,234", icon: "⚠️" },
+  { 
+    title: "Total Users", 
+    value: "1,234", 
+    icon: "/figmaAssets/frame-1171275705.svg",
+    bg: "bg-[#f3e8ff]" 
+  },
+  { 
+    title: "Active Users", 
+    value: "1,234", 
+    icon: "/figmaAssets/frame-1171275704-2.svg",
+    bg: "bg-[#f0fdf4]" 
+  },
+  { 
+    title: "InActive Users", 
+    value: "1,234", 
+    icon: "/figmaAssets/frame-1171275704-3.svg",
+    bg: "bg-[#f1f5f9]" 
+  },
+  { 
+    title: "Total Vendors", 
+    value: "1,234", 
+    icon: "/figmaAssets/frame-1171275704-1.svg",
+    bg: "bg-[#eff6ff]" 
+  },
+  { 
+    title: "Total User Reports", 
+    value: "1,234", 
+    icon: "/figmaAssets/frame-1171275704-4.svg",
+    bg: "bg-[#fef2f2]" 
+  },
 ];
 
 const chartData = [
@@ -74,13 +100,15 @@ export default function UsersPage() {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {stats.map((stat, i) => (
-            <Card key={i} className="border-0 shadow-sm">
-              <CardContent className="p-4 flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-[#7b848f]">{stat.title}</p>
-                  <p className="text-xl font-bold text-[#222f36]">{stat.value}</p>
+            <Card key={i} className="border-0 shadow-[0px_1px_2px_#0000000d] rounded-[15px]">
+              <CardContent className="p-5 flex items-center justify-between">
+                <div className="space-y-1">
+                  <p className="text-[11px] font-medium text-[#7b848f] uppercase tracking-wider">{stat.title}</p>
+                  <p className="text-2xl font-bold text-[#222f36]">{stat.value}</p>
                 </div>
-                <div className="text-2xl opacity-20">{stat.icon}</div>
+                <div className={cn("w-12 h-12 rounded-full flex items-center justify-center", stat.bg)}>
+                  <img src={stat.icon} alt={stat.title} className="w-6 h-6" />
+                </div>
               </CardContent>
             </Card>
           ))}
