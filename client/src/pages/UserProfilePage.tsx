@@ -298,27 +298,45 @@ export default function UserProfilePage() {
       )}
 
       <Dialog open={showBlockDialog} onOpenChange={setShowBlockDialog}>
-        <DialogContent className="max-w-md rounded-[32px] p-0 overflow-hidden border-none shadow-2xl">
-          <div className="p-8 space-y-6 text-center">
-            <div className="flex justify-end -mt-4 -mr-4">
-              <Button variant="ghost" size="icon" onClick={() => setShowBlockDialog(false)} className="rounded-full h-8 w-8 text-gray-400">
-                <X className="h-5 w-5" />
-              </Button>
-            </div>
-            <div className="flex flex-col items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Avatar className="w-12 h-12">
+        <DialogContent className="max-w-[500px] rounded-[12px] p-0 overflow-hidden border-none shadow-2xl bg-white">
+          <div className="p-10 space-y-8 text-center relative">
+            <button 
+              onClick={() => setShowBlockDialog(false)} 
+              className="absolute right-6 top-6 w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:bg-gray-50 transition-colors"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            
+            <div className="flex flex-col items-center gap-6">
+              <div className="flex items-center gap-3">
+                <Avatar className="w-10 h-10 rounded-lg">
                   <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" />
                   <AvatarFallback>JD</AvatarFallback>
                 </Avatar>
                 <span className="text-xl font-bold text-[#222f36]">John Doe</span>
               </div>
-              <h2 className="text-2xl font-bold text-[#222f36] px-4">Are you sure you want to block this post User ?</h2>
-              <p className="text-sm text-gray-500 leading-relaxed px-6">Lorem ipsum dolor sit amet consectetur. In tincidunt a pellentesque gravida pellentesque suspendisse interdum. Praesent risus non id auctor. Non tortor quis pretium placerat. Vestibulum convallis.</p>
+              <h2 className="text-[28px] font-bold text-[#222f36] leading-tight max-w-[400px]">
+                Are you sure you want to block this post User ?
+              </h2>
+              <p className="text-base text-[#7b848f] leading-relaxed px-4">
+                Lorem ipsum dolor sit amet consectetur. In tincidunt a pellentesque gravida pellentesque suspendisse interdum. Praesent risus non id auctor. Non tortor quis pretium placerat. Vestibulum convallis.
+              </p>
             </div>
-            <div className="flex gap-4 pt-4">
-              <Button onClick={() => setShowBlockDialog(false)} className="flex-1 h-14 bg-[#62a230] hover:bg-[#548a29] text-white font-bold text-lg rounded-2xl transition-all shadow-lg shadow-[#62a230]/20">Yes</Button>
-              <Button variant="secondary" onClick={() => setShowBlockDialog(false)} className="flex-1 h-14 bg-[#f8fafc] hover:bg-[#f1f5f9] text-[#7b848f] font-bold text-lg rounded-2xl transition-all border border-[#e2e8f0]">No</Button>
+
+            <div className="flex gap-5 pt-4">
+              <Button 
+                onClick={() => setShowBlockDialog(false)}
+                className="flex-1 h-[68px] bg-[#62a230] hover:bg-[#548a29] text-white font-bold text-[22px] rounded-[16px] transition-all shadow-lg shadow-[#62a230]/20"
+              >
+                Yes
+              </Button>
+              <Button 
+                variant="secondary"
+                onClick={() => setShowBlockDialog(false)}
+                className="flex-1 h-[68px] bg-[#f8fafc] hover:bg-[#f1f5f9] text-[#7b848f] font-bold text-[22px] rounded-[16px] transition-all border border-gray-100"
+              >
+                No
+              </Button>
             </div>
           </div>
         </DialogContent>
