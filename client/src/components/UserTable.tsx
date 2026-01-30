@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "wouter";
 import {
   Table,
   TableBody,
@@ -11,7 +12,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
+import { MoreHorizontal, ChevronLeft, ChevronRight, UserX, ShieldAlert } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export interface User {
   id: string | number;
@@ -53,13 +60,13 @@ export function UserTable({ users, onPageChange, currentPage = 2 }: UserTablePro
             {users.map((user) => (
               <TableRow key={user.id} className="hover:bg-[#f8fafc] transition-colors bg-white">
                 <TableCell className="p-4">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="w-8 h-8">
+                  <Link href={`/users/${user.id}`} className="flex items-center gap-3 cursor-pointer group">
+                    <Avatar className="w-8 h-8 group-hover:ring-2 ring-[#62a230] transition-all">
                       <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.id}`} />
                       <AvatarFallback>JD</AvatarFallback>
                     </Avatar>
-                    <span className="text-sm font-medium text-[#222f36]">{user.name}</span>
-                  </div>
+                    <span className="text-sm font-medium text-[#222f36] group-hover:text-[#62a230] transition-colors">{user.name}</span>
+                  </Link>
                 </TableCell>
                 <TableCell className="p-4 text-sm text-[#7b848f]">{user.mobile}</TableCell>
                 <TableCell className="p-4 text-sm text-[#7b848f]">{user.city}</TableCell>
@@ -93,9 +100,24 @@ export function UserTable({ users, onPageChange, currentPage = 2 }: UserTablePro
                   </div>
                 </TableCell>
                 <TableCell className="p-4">
-                  <Button variant="ghost" size="icon" className="text-[#7b848f]">
-                    <MoreHorizontal className="w-4 h-4" />
-                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className="text-[#7b848f]">
+                        <MoreHorizontal className="w-4 h-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      <DropdownMenuItem asChild>
+                        <Link href={`/users/${user.id}`} className="cursor-pointer">View Profile</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="text-red-600 focus:text-red-600 cursor-pointer">
+                        <UserX className="w-4 h-4 mr-2" /> Block Account
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="text-red-600 focus:text-red-600 cursor-pointer">
+                        <ShieldAlert className="w-4 h-4 mr-2" /> Suspend Account
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </TableCell>
               </TableRow>
             ))}
@@ -131,3 +153,4 @@ export function UserTable({ users, onPageChange, currentPage = 2 }: UserTablePro
 }
 
 const cn = (...classes: any[]) => classes.filter(Boolean).join(" ");
+

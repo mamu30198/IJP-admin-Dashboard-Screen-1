@@ -4,10 +4,13 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Bell, Settings, Search } from "lucide-react";
+import { Bell, Settings, Search, Calendar as CalendarIcon } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { StatCard } from "@/components/StatCard";
 import { UserTable, User } from "@/components/UserTable";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
 
 const stats = [
   { 
@@ -62,6 +65,7 @@ const users: User[] = Array.from({ length: 10 }).map((_, i) => ({
 
 export default function UsersPage() {
   const [search, setSearch] = useState("");
+  const [date, setDate] = useState<Date | undefined>(new Date());
 
   return (
     <div className="flex bg-[#f5f6fa] w-full min-h-screen">
@@ -121,7 +125,22 @@ export default function UsersPage() {
           <div className="lg:col-span-8 bg-white border-0 shadow-[0px_1px_2px_#0000000d] rounded-[15px] p-6">
             <div className="flex flex-row items-center justify-between pb-4">
               <h3 className="text-lg font-semibold text-[#222f36]">Daily Active Users</h3>
-              <Badge variant="outline" className="text-[#7b848f] border-[#7b848f] text-[10px] uppercase">2 Oct to 18 Oct, 2025</Badge>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="text-[#7b848f] border-[#7b848f] text-[10px] uppercase gap-2 h-8">
+                    <CalendarIcon className="w-3 h-3" />
+                    {date ? format(date, "d MMM") : "Pick a date"} to 18 Oct, 2025
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="end">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
             <div className="h-[250px]">
               <ResponsiveContainer width="100%" height="100%">
