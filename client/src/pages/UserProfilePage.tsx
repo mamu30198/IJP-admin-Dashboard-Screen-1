@@ -16,7 +16,8 @@ import {
   ShieldAlert,
   UserX,
   ChevronRight,
-  Search
+  Search,
+  X
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -26,11 +27,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const userPosts = [
-  { id: 1, image: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=800&auto=format&fit=crop&q=60" },
-  { id: 2, image: "https://images.unsplash.com/photo-1461151304267-38535e770f71?w=800&auto=format&fit=crop&q=60" },
-  { id: 3, image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&auto=format&fit=crop&q=60" },
+  { id: 1, image: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=800&auto=format&fit=crop&q=60", type: "sponsored" },
+  { id: 2, image: "https://images.unsplash.com/photo-1461151304267-38535e770f71?w=800&auto=format&fit=crop&q=60", type: "regular" },
+  { id: 3, image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&auto=format&fit=crop&q=60", type: "fav" },
 ];
 
 const followersData = [
@@ -46,6 +54,8 @@ const followersData = [
 
 export default function UserProfilePage() {
   const [drawerType, setDrawerType] = useState<"Followers" | "Following" | null>(null);
+  const [activeFilter, setActiveFilter] = useState("All");
+  const [showBlockDialog, setShowBlockDialog] = useState(false);
 
   return (
     <div className="flex bg-[#f5f6fa] w-full min-h-screen relative overflow-hidden">
@@ -116,7 +126,10 @@ export default function UserProfilePage() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56 rounded-xl p-2 shadow-xl border-[#0000000d]">
-                    <DropdownMenuItem className="flex items-center gap-2 text-[#222f36] cursor-pointer py-2.5">
+                    <DropdownMenuItem 
+                      className="flex items-center gap-2 text-[#222f36] cursor-pointer py-2.5"
+                      onClick={() => setShowBlockDialog(true)}
+                    >
                       <UserX className="w-4 h-4 text-gray-400" /> Block Account Temporary
                     </DropdownMenuItem>
                     <DropdownMenuItem className="flex items-center gap-2 text-[#222f36] cursor-pointer py-2.5 border-t border-gray-50">
@@ -191,12 +204,45 @@ export default function UserProfilePage() {
             <Card className="border-0 shadow-sm rounded-[24px] bg-white">
               <CardContent className="p-4 flex items-center justify-between">
                 <div className="flex gap-2">
-                  <Button variant="ghost" className="bg-[#f0fdf4] text-[#62a230] hover:bg-[#f0fdf4]/80 px-4 rounded-lg">All</Button>
-                  <Button variant="ghost" className="text-[#7b848f] px-4">Sponsored Post</Button>
-                  <Button variant="ghost" className="text-[#7b848f] px-4">Fav posts</Button>
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => setActiveFilter("All")}
+                    className={cn(
+                      "px-6 h-9 rounded-full text-sm transition-all border",
+                      activeFilter === "All" 
+                        ? "bg-[#62a230] text-white border-[#62a230] font-medium" 
+                        : "text-[#7b848f] border-transparent"
+                    )}
+                  >
+                    All
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => setActiveFilter("Sponsored Post")}
+                    className={cn(
+                      "px-6 h-9 rounded-full text-sm transition-all border",
+                      activeFilter === "Sponsored Post" 
+                        ? "bg-white text-[#62a230] border-[#62a230] font-medium" 
+                        : "text-[#7b848f] border-transparent"
+                    )}
+                  >
+                    Sponsored Post
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => setActiveFilter("Fav posts")}
+                    className={cn(
+                      "px-6 h-9 rounded-full text-sm transition-all border",
+                      activeFilter === "Fav posts" 
+                        ? "bg-white text-[#62a230] border-[#62a230] font-medium" 
+                        : "text-[#7b848f] border-transparent"
+                    )}
+                  >
+                    Fav posts
+                  </Button>
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="ghost" size="icon" className="w-9 h-9 bg-[#f0fdf4] text-[#62a230] rounded-lg">
+                  <Button variant="ghost" size="icon" className="w-9 h-9 bg-[#f0fdf4] text-[#62a230] rounded-lg border border-[#62a230]/10">
                     <LayoutGrid className="w-5 h-5" />
                   </Button>
                   <Button variant="ghost" size="icon" className="w-9 h-9 text-[#7b848f] rounded-lg">
@@ -208,13 +254,130 @@ export default function UserProfilePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {userPosts.map(post => (
-                <div key={post.id} className="aspect-[4/3] rounded-[24px] overflow-hidden shadow-sm hover:shadow-md transition-shadow group cursor-pointer bg-white">
+                <div 
+                  key={post.id} 
+                  className={cn(
+                    "aspect-[4/3] rounded-[24px] overflow-hidden shadow-sm hover:shadow-md transition-all group cursor-pointer bg-white border",
+                    post.type === "sponsored" || post.type === "fav" ? "border-[#e2e8f0]" : "border-transparent"
+                  )}
+                >
                   <img src={post.image} alt="User Post" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 </div>
               ))}
             </div>
           </div>
         </div>
+      </main>
+
+      {/* Side Component (Followers/Following) */}
+      {drawerType && (
+        <>
+          <div 
+            className="fixed inset-0 bg-black/10 z-40 transition-opacity backdrop-blur-[2px]" 
+            onClick={() => setDrawerType(null)} 
+          />
+          <div className="fixed right-0 top-0 bottom-0 w-[380px] bg-white shadow-2xl z-50 flex flex-col p-6 animate-in slide-in-from-right duration-300 rounded-l-[32px]">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-bold text-[#222f36]">{drawerType}</h2>
+              <div className="flex items-center gap-3">
+                <span className="text-sm font-semibold text-[#7b848f]">
+                  {drawerType === "Followers" ? "920k" : "102k"}
+                </span>
+                <button 
+                  className="w-9 h-9 hover:bg-gray-100 rounded-full text-[#7b848f] flex items-center justify-center transition-colors"
+                  onClick={() => setDrawerType(null)}
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+
+            <div className="relative mb-8">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7b848f]" />
+              <Input 
+                placeholder={`Search ${drawerType.toLowerCase()}...`}
+                className="pl-11 h-12 bg-[#f8fafc] border-none rounded-xl text-sm focus-visible:ring-1 focus-visible:ring-[#62a230]"
+              />
+            </div>
+
+            <div className="flex-1 overflow-y-auto space-y-5 pr-2 custom-scrollbar">
+              {followersData.map((user, i) => (
+                <div key={i} className="flex items-center justify-between group py-1">
+                  <div className="flex items-center gap-4">
+                    <Avatar className="w-12 h-12 border-2 border-white shadow-sm ring-1 ring-gray-100">
+                      <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${drawerType}${i}`} />
+                      <AvatarFallback>U</AvatarFallback>
+                    </Avatar>
+                    <div className="space-y-0.5">
+                      <p className="text-[14px] font-bold text-[#222f36]">{user.name}</p>
+                      <p className="text-[11px] text-[#7b848f] font-medium">{user.username}</p>
+                    </div>
+                  </div>
+                  <Button 
+                    variant={user.followed ? "ghost" : "default"} 
+                    className={cn(
+                      "h-9 px-6 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all",
+                      user.followed 
+                        ? "bg-[#f0fdf4] text-[#62a230] hover:bg-[#dcfce7] border border-[#62a230]/20" 
+                        : "bg-[#62a230] text-white hover:bg-[#548a29] shadow-sm shadow-[#62a230]/20"
+                    )}
+                  >
+                    {user.followed ? "Following" : "Follow"}
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Block Dialog */}
+      <Dialog open={showBlockDialog} onOpenChange={setShowBlockDialog}>
+        <DialogContent className="max-w-md rounded-[32px] p-0 overflow-hidden border-none shadow-2xl">
+          <div className="p-8 space-y-6 text-center">
+            <div className="flex justify-end -mt-4 -mr-4">
+              <Button variant="ghost" size="icon" onClick={() => setShowBlockDialog(false)} className="rounded-full h-8 w-8 text-gray-400">
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+            
+            <div className="flex flex-col items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Avatar className="w-12 h-12">
+                  <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" />
+                  <AvatarFallback>JD</AvatarFallback>
+                </Avatar>
+                <span className="text-xl font-bold text-[#222f36]">John Doe</span>
+              </div>
+              <h2 className="text-2xl font-bold text-[#222f36] px-4">
+                Are you sure you want to block this post User ?
+              </h2>
+              <p className="text-sm text-gray-500 leading-relaxed px-6">
+                Lorem ipsum dolor sit amet consectetur. In tincidunt a pellentesque gravida pellentesque suspendisse interdum. Praesent risus non id auctor. Non tortor quis pretium placerat. Vestibulum convallis.
+              </p>
+            </div>
+
+            <div className="flex gap-4 pt-4">
+              <Button 
+                onClick={() => setShowBlockDialog(false)}
+                className="flex-1 h-14 bg-[#62a230] hover:bg-[#548a29] text-white font-bold text-lg rounded-2xl transition-all shadow-lg shadow-[#62a230]/20"
+              >
+                Yes
+              </Button>
+              <Button 
+                variant="secondary"
+                onClick={() => setShowBlockDialog(false)}
+                className="flex-1 h-14 bg-[#f8fafc] hover:bg-[#f1f5f9] text-[#7b848f] font-bold text-lg rounded-2xl transition-all border border-[#e2e8f0]"
+              >
+                No
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
       </main>
 
       {/* Side Component (Followers/Following) */}
