@@ -79,7 +79,7 @@ export function Sidebar({ className }: { className?: string }) {
             {mainMenuItems.map((item) => {
               const isActive = location === item.url;
               return (
-                <Link key={item.title} href={item.url}>
+                <Link key={item.title} href={item.url} asChild>
                   <a
                     className={cn(
                       "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group",
@@ -105,7 +105,7 @@ export function Sidebar({ className }: { className?: string }) {
           </p>
           <nav className="space-y-1">
             {otherMenuItems.map((item) => (
-              <Link key={item.title} href={item.url}>
+              <Link key={item.title} href={item.url} asChild>
                 <a className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-all duration-200 group">
                   <item.icon className="w-5 h-5 text-white/40 group-hover:text-white" />
                   <span className="text-[14px] font-medium">
