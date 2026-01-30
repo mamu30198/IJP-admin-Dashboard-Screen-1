@@ -26,7 +26,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetClose,
+} from "@/components/ui/sheet";
 
 const stats = [
   { 
@@ -370,78 +376,78 @@ export default function AdsRevenuePage() {
           </CardContent>
         </Card>
 
-        {/* Vendor Detail View Modal */}
-        <Dialog open={!!selectedVendor} onOpenChange={() => setSelectedVendor(null)}>
-          <DialogContent className="max-w-[1000px] bg-[#f5f6fa] border-0 p-0 overflow-hidden rounded-[20px]">
-            <div className="p-6 space-y-6">
+        {/* Vendor Detail View Drawer (Right-side Sheet) */}
+        <Sheet open={!!selectedVendor} onOpenChange={() => setSelectedVendor(null)}>
+          <SheetContent side="right" className="sm:max-w-[70%] w-full bg-[#f5f6fa] border-l-0 p-0 overflow-y-auto overflow-x-hidden">
+            <div className="p-4 md:p-8 space-y-8">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Avatar className="w-12 h-12 border-2 border-white shadow-sm">
+                <div className="flex items-center gap-4">
+                  <Avatar className="w-14 h-14 border-2 border-white shadow-sm">
                     <AvatarImage src="/figmaAssets/2-jpg.png" />
                     <AvatarFallback>SA</AvatarFallback>
                   </Avatar>
                   <div>
-                    <h2 className="text-lg font-bold text-[#222f36]">{selectedVendor?.vendor || "Siti Arlina"}</h2>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] bg-white px-2 py-0.5 rounded-full text-[#7b848f] flex items-center gap-1">
+                    <h2 className="text-xl font-bold text-[#222f36]">{selectedVendor?.vendor || "Siti Arlina"}</h2>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-[11px] bg-white px-2.5 py-1 rounded-full text-[#7b848f] flex items-center gap-1.5 shadow-sm">
                         <span className="w-2 h-2 rounded-full bg-blue-500" /> Smart Tv
                       </span>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <Button variant="outline" className="bg-white border-0 text-[11px] font-semibold text-[#222f36] h-9 px-4 rounded-lg flex items-center gap-2">
+                <div className="flex items-center gap-4">
+                  <Button variant="outline" className="bg-white border-0 text-[12px] font-bold text-[#222f36] h-10 px-5 rounded-xl flex items-center gap-2 shadow-sm hover:bg-white/90">
                     <AlertCircle className="w-4 h-4 text-[#7b848f]" /> Close Add
                   </Button>
-                  <Button variant="link" className="text-[#62a230] text-[11px] font-bold p-0 hover:no-underline">View Profile</Button>
-                  <DialogClose asChild>
-                    <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full bg-white/50"><X className="w-4 h-4" /></Button>
-                  </DialogClose>
+                  <Button variant="link" className="text-[#62a230] text-[12px] font-bold p-0 hover:no-underline">View Profile</Button>
+                  <SheetClose asChild>
+                    <Button variant="ghost" size="icon" className="w-9 h-9 rounded-full bg-white/50"><X className="w-5 h-5 text-[#7b848f]" /></Button>
+                  </SheetClose>
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <h3 className="text-sm font-bold text-[#222f36]">Current Running Ads</h3>
+              <div className="space-y-5">
+                <h3 className="text-base font-bold text-[#222f36]">Current Running Ads</h3>
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   <div className="lg:col-span-2">
-                    <div className="bg-white rounded-[20px] overflow-hidden shadow-sm relative group">
-                      <img src="/figmaAssets/monsoon-sale.png" alt="Monsoon Sale" className="w-full h-[240px] object-cover" />
-                      <div className="absolute top-4 left-4 flex items-center gap-2 bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full text-white text-[11px]">
-                        <Eye className="w-3.5 h-3.5" /> 93,050 Views
+                    <div className="bg-white rounded-[25px] overflow-hidden shadow-sm relative group p-1.5">
+                      <img src="/figmaAssets/monsoon-sale.png" alt="Monsoon Sale" className="w-full h-[280px] object-cover rounded-[20px]" />
+                      <div className="absolute top-6 left-6 flex items-center gap-2 bg-black/40 backdrop-blur-md px-4 py-1.5 rounded-full text-white text-[12px] font-medium">
+                        <Eye className="w-4 h-4" /> 93,050 Views
                       </div>
-                      <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white">
-                        <Info className="w-3.5 h-3.5" />
+                      <div className="absolute top-6 right-6 w-8 h-8 rounded-full bg-white/30 backdrop-blur-md flex items-center justify-center text-white border border-white/20">
+                        <Info className="w-4 h-4" />
                       </div>
                     </div>
-                    <div className="flex items-center justify-center gap-4 mt-4">
-                      <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full bg-white border border-gray-100 shadow-sm">
-                        <ChevronLeft className="w-4 h-4" />
+                    <div className="flex items-center justify-center gap-5 mt-6">
+                      <Button variant="ghost" size="icon" className="w-9 h-9 rounded-full bg-white border border-gray-100 shadow-sm hover:bg-gray-50">
+                        <ChevronLeft className="w-5 h-5 text-[#7b848f]" />
                       </Button>
-                      <div className="flex items-center gap-2">
-                        <span className="w-6 h-6 rounded-full bg-[#62a230] text-white text-[10px] flex items-center justify-center font-bold">01</span>
-                        <span className="w-6 h-6 rounded-full bg-white text-[#7b848f] text-[10px] flex items-center justify-center font-bold">02</span>
-                        <span className="w-6 h-6 rounded-full bg-white text-[#7b848f] text-[10px] flex items-center justify-center font-bold">03</span>
+                      <div className="flex items-center gap-3">
+                        <span className="w-7 h-7 rounded-full bg-[#62a230] text-white text-[11px] flex items-center justify-center font-bold shadow-sm">01</span>
+                        <span className="w-7 h-7 rounded-full bg-white text-[#7b848f] text-[11px] flex items-center justify-center font-bold">02</span>
+                        <span className="w-7 h-7 rounded-full bg-white text-[#7b848f] text-[11px] flex items-center justify-center font-bold">03</span>
                       </div>
-                      <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full bg-white border border-gray-100 shadow-sm">
-                        <ChevronRight className="w-4 h-4" />
+                      <Button variant="ghost" size="icon" className="w-9 h-9 rounded-full bg-white border border-gray-100 shadow-sm hover:bg-gray-50">
+                        <ChevronRight className="w-5 h-5 text-[#7b848f]" />
                       </Button>
                     </div>
                   </div>
                   
-                  <div className="space-y-4">
-                    <Card className="border-0 bg-white rounded-[20px] p-4 shadow-sm">
-                      <h4 className="text-[11px] font-bold text-[#7b848f] uppercase tracking-wider mb-3">Overview</h4>
-                      <div className="space-y-3">
+                  <div className="space-y-6">
+                    <Card className="border-0 bg-white rounded-[25px] p-6 shadow-sm">
+                      <h4 className="text-[11px] font-bold text-[#7b848f] uppercase tracking-widest mb-5">Overview</h4>
+                      <div className="space-y-4">
                         {[
-                          { label: 'Ad Reached', value: '93k', trend: 'up' },
-                          { label: 'Content interaction', value: '102k', trend: 'up' },
-                          { label: 'Profile Visits', value: '180k', trend: 'up' },
-                          { label: 'Website Visits', value: '180k', trend: 'up' },
+                          { label: 'Ad Reached', value: '93k' },
+                          { label: 'Content interaction', value: '102k' },
+                          { label: 'Profile Visits', value: '180k' },
+                          { label: 'Website Visits', value: '180k' },
                         ].map((item, idx) => (
                           <div key={idx} className="flex items-center justify-between">
-                            <span className="text-[11px] text-[#222f36]">{item.label}</span>
-                            <div className="flex items-center gap-1 text-[#62a230] text-[11px] font-bold">
-                              <TrendingUp className="w-3 h-3" /> {item.value}
+                            <span className="text-[12px] font-medium text-[#222f36]">{item.label}</span>
+                            <div className="flex items-center gap-1 text-[#62a230] text-[12px] font-bold">
+                              <TrendingUp className="w-3.5 h-3.5" /> {item.value}
                             </div>
                           </div>
                         ))}
@@ -451,110 +457,110 @@ export default function AdsRevenuePage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card className="bg-white rounded-[20px] border-0 p-5 shadow-sm">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <h4 className="text-sm font-bold text-[#222f36]">Last 7 Days</h4>
-                      <ChevronRight className="w-4 h-4 rotate-90 text-[#7b848f]" />
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <Card className="bg-white rounded-[25px] border-0 p-6 shadow-sm">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-2 group cursor-pointer">
+                      <h4 className="text-base font-bold text-[#222f36]">Last 7 Days</h4>
+                      <ChevronRight className="w-4 h-4 rotate-90 text-[#7b848f] group-hover:text-[#62a230] transition-colors" />
                     </div>
-                    <span className="text-[10px] text-[#7b848f]">20 June to 26 June</span>
+                    <span className="text-[11px] text-[#7b848f] font-medium">20 June to 26 June</span>
                   </div>
                   
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-2 bg-[#e8f5e9] px-3 py-1 rounded-full text-[#62a230] text-[11px] font-bold">
-                      <TrendingUp className="w-3.5 h-3.5" /> 500
+                  <div className="flex items-center justify-between mb-8">
+                    <div className="flex items-center gap-2 bg-[#e8f5e9] px-4 py-1.5 rounded-full text-[#62a230] text-[12px] font-bold shadow-sm">
+                      <TrendingUp className="w-4 h-4" /> 500
                     </div>
-                    <h4 className="text-sm font-bold text-[#222f36]">Reach</h4>
+                    <h4 className="text-base font-bold text-[#222f36]">Reach</h4>
                   </div>
 
-                  <div className="h-[120px] mb-6">
+                  <div className="h-[140px] mb-8">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={reachData}>
-                        <Bar dataKey="reach" radius={[4, 4, 0, 0]} barSize={20}>
+                        <Bar dataKey="reach" radius={[5, 5, 0, 0]} barSize={24}>
                           {reachData.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={index === 1 ? '#62a230' : '#c8e6c9'} />
                           ))}
                         </Bar>
-                        <XAxis dataKey="day" hide />
+                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#7b848f', fontSize: 10 }} dy={10} />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
 
-                  <div className="space-y-3 pt-4 border-t border-gray-100">
-                    <div className="flex items-center justify-between text-[11px]">
-                      <span className="text-[#7b848f]">Content interaction</span>
+                  <div className="space-y-4 pt-6 border-t border-gray-50">
+                    <div className="flex items-center justify-between text-[12px]">
+                      <span className="text-[#7b848f] font-medium">Content interaction</span>
                       <span className="font-bold text-[#222f36]">850k</span>
                     </div>
-                    <div className="flex items-center justify-between text-[11px]">
-                      <span className="text-[#7b848f]">Vendor Profile Visits</span>
+                    <div className="flex items-center justify-between text-[12px]">
+                      <span className="text-[#7b848f] font-medium">Vendor Profile Visits</span>
                       <span className="font-bold text-[#222f36]">600k</span>
                     </div>
                   </div>
                 </Card>
 
-                <div className="space-y-4">
-                  <div className="bg-white rounded-[20px] p-5 shadow-sm relative overflow-hidden flex flex-col items-center">
-                    <div className="relative w-32 h-32 mb-4">
+                <div className="space-y-6">
+                  <div className="bg-white rounded-[25px] p-7 shadow-sm relative overflow-hidden flex flex-col items-center group">
+                    <div className="relative w-40 h-40 mb-6 transition-transform group-hover:scale-105 duration-500">
                       <svg className="w-full h-full transform -rotate-90">
-                        <circle cx="64" cy="64" r="58" stroke="#f1f5f9" strokeWidth="8" fill="transparent" />
-                        <circle cx="64" cy="64" r="58" stroke="#62a230" strokeWidth="8" fill="transparent" strokeDasharray="364.4" strokeDashoffset="72.8" strokeLinecap="round" />
+                        <circle cx="80" cy="80" r="72" stroke="#f1f5f9" strokeWidth="10" fill="transparent" />
+                        <circle cx="80" cy="80" r="72" stroke="#62a230" strokeWidth="10" fill="transparent" strokeDasharray="452.16" strokeDashoffset="90.43" strokeLinecap="round" />
                       </svg>
                       <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <span className="text-2xl font-bold text-[#222f36]">93k</span>
-                        <span className="text-[10px] text-[#7b848f]">Account Reached</span>
+                        <span className="text-3xl font-black text-[#222f36]">93k</span>
+                        <span className="text-[11px] text-[#7b848f] font-bold uppercase tracking-wider">Reached</span>
                       </div>
                     </div>
-                    <div className="flex items-center justify-between w-full text-[11px] pt-4 border-t border-gray-100">
-                      <span className="text-[#7b848f]">Account Reached</span>
+                    <div className="flex items-center justify-between w-full text-[12px] pt-5 border-t border-gray-50">
+                      <span className="text-[#7b848f] font-medium">Account Reached</span>
                       <span className="font-bold text-[#222f36]">93k</span>
                     </div>
                   </div>
 
-                  <Card className="bg-white rounded-[20px] border-0 p-5 shadow-sm">
-                    <h4 className="text-sm font-bold text-[#222f36] mb-4">Sponsored details</h4>
-                    <div className="grid grid-cols-2 gap-4 mb-4">
-                      <div className="p-3 bg-[#f8fafc] rounded-xl border border-gray-100">
-                        <p className="text-[10px] text-[#7b848f] mb-1">Send Message</p>
-                        <p className="text-[11px] font-bold text-[#222f36]">@Siti Arlina</p>
+                  <Card className="bg-white rounded-[25px] border-0 p-6 shadow-sm">
+                    <h4 className="text-base font-bold text-[#222f36] mb-5">Sponsored details</h4>
+                    <div className="grid grid-cols-2 gap-5 mb-5">
+                      <div className="p-4 bg-[#f8fafc] rounded-2xl border border-gray-50 shadow-sm">
+                        <p className="text-[11px] font-bold text-[#7b848f] uppercase tracking-wider mb-2">Send Message</p>
+                        <p className="text-[13px] font-bold text-[#222f36]">@Siti Arlina</p>
                       </div>
-                      <div className="p-3 bg-[#f8fafc] rounded-xl border border-gray-100">
-                        <div className="flex items-center justify-between mb-1">
-                          <p className="text-[10px] text-[#7b848f]">Total spend</p>
-                          <span className="text-[9px] text-[#62a230] font-bold">$400 over 5 days</span>
+                      <div className="p-4 bg-[#f8fafc] rounded-2xl border border-gray-50 shadow-sm">
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="text-[11px] font-bold text-[#7b848f] uppercase tracking-wider">Total spend</p>
+                          <span className="text-[10px] text-[#62a230] font-black">$400 / 5d</span>
                         </div>
-                        <p className="text-[11px] font-bold text-[#222f36]">$1,200</p>
+                        <p className="text-[13px] font-bold text-[#222f36]">$1,200</p>
                       </div>
                     </div>
-                    <div className="p-3 bg-[#f8fafc] rounded-xl border border-gray-100">
-                      <div className="flex items-center justify-between mb-2">
-                        <p className="text-[10px] text-[#7b848f]">Audience</p>
-                        <MapPin className="w-3 h-3 text-[#7b848f]" />
+                    <div className="p-4 bg-[#f8fafc] rounded-2xl border border-gray-50 shadow-sm">
+                      <div className="flex items-center justify-between mb-3">
+                        <p className="text-[11px] font-bold text-[#7b848f] uppercase tracking-wider">Audience Location</p>
+                        <MapPin className="w-4 h-4 text-[#7b848f]" />
                       </div>
-                      <p className="text-[11px] font-bold text-[#222f36] mb-3">kolkata , Orissa, 153004</p>
-                      <div className="flex gap-2">
-                        {['Travel', 'Travel', 'Travel'].map((tag, i) => (
-                          <span key={i} className="text-[9px] bg-white border border-gray-200 px-3 py-1 rounded-full text-[#7b848f] font-medium">{tag}</span>
+                      <p className="text-[13px] font-bold text-[#222f36] mb-4">Kolkata, Orissa, 153004</p>
+                      <div className="flex gap-2.5">
+                        {['Travel', 'Leisure', 'Luxury'].map((tag, i) => (
+                          <span key={i} className="text-[10px] bg-white border border-gray-100 px-4 py-1.5 rounded-full text-[#7b848f] font-bold shadow-sm">{tag}</span>
                         ))}
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4 mt-4">
+                    <div className="grid grid-cols-2 gap-6 mt-6 pt-4 border-t border-gray-50">
                       <div>
-                        <p className="text-[10px] text-[#7b848f] mb-1 text-right">Ad Started Date</p>
-                        <p className="text-[11px] font-bold text-[#222f36] text-right">21 Dec 2024</p>
+                        <p className="text-[11px] font-bold text-[#7b848f] uppercase tracking-wider mb-1 text-right">Started Date</p>
+                        <p className="text-[12px] font-bold text-[#222f36] text-right">21 Dec 2024</p>
                       </div>
                       <div>
-                        <p className="text-[10px] text-[#7b848f] mb-1 text-right">Ad End Date</p>
-                        <p className="text-[11px] font-bold text-[#222f36] text-right">25 Dec 2024</p>
-                        <p className="text-[9px] text-[#62a230] font-bold text-right">3 days left</p>
+                        <p className="text-[11px] font-bold text-[#7b848f] uppercase tracking-wider mb-1 text-right">End Date</p>
+                        <p className="text-[12px] font-bold text-[#222f36] text-right">25 Dec 2024</p>
+                        <p className="text-[10px] text-[#62a230] font-black text-right mt-0.5">3 days left</p>
                       </div>
                     </div>
                   </Card>
                 </div>
               </div>
             </div>
-          </DialogContent>
-        </Dialog>
+          </SheetContent>
+        </Sheet>
       </main>
     </div>
   );
