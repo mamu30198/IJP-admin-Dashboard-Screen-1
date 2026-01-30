@@ -132,7 +132,7 @@ export default function UserProfilePage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Sidebar Info */}
           <div className="lg:col-span-4 space-y-6">
-            <Card className="border-0 shadow-sm rounded-[24px]">
+            <Card className="border-0 shadow-sm rounded-[24px] bg-white">
               <CardContent className="p-6 space-y-6">
                 <div className="flex items-center justify-between">
                   <div className="flex gap-1">
@@ -188,12 +188,12 @@ export default function UserProfilePage() {
 
           {/* Posts Feed */}
           <div className="lg:col-span-8 space-y-6">
-            <Card className="border-0 shadow-sm rounded-[24px]">
+            <Card className="border-0 shadow-sm rounded-[24px] bg-white">
               <CardContent className="p-4 flex items-center justify-between">
                 <div className="flex gap-2">
                   <Button variant="ghost" className="bg-[#f0fdf4] text-[#62a230] hover:bg-[#f0fdf4]/80 px-4 rounded-lg">All</Button>
                   <Button variant="ghost" className="text-[#7b848f] px-4">Sponsored Post</Button>
-                  <Button variant="ghost" className="text-[#7b848f] px-4">Regular Post</Button>
+                  <Button variant="ghost" className="text-[#7b848f] px-4">Fav posts</Button>
                 </div>
                 <div className="flex gap-2">
                   <Button variant="ghost" size="icon" className="w-9 h-9 bg-[#f0fdf4] text-[#62a230] rounded-lg">
@@ -208,7 +208,7 @@ export default function UserProfilePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {userPosts.map(post => (
-                <div key={post.id} className="aspect-[4/3] rounded-[24px] overflow-hidden shadow-sm hover:shadow-md transition-shadow group cursor-pointer">
+                <div key={post.id} className="aspect-[4/3] rounded-[24px] overflow-hidden shadow-sm hover:shadow-md transition-shadow group cursor-pointer bg-white">
                   <img src={post.image} alt="User Post" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 </div>
               ))}
