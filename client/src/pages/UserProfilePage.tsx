@@ -32,66 +32,77 @@ const userPosts = [
 export default function UserProfilePage() {
   return (
     <div className="flex bg-[#f5f6fa] w-full min-h-screen">
-      <Sidebar className="w-[280px] flex-shrink-0 sticky top-0" />
+      <Sidebar className="w-[280px] flex-shrink-0 sticky top-0" activeModule="Users" />
       
       <main className="flex-1 p-6 space-y-6 overflow-x-hidden">
         {/* Banner Section */}
-        <div className="relative w-full h-[240px] bg-gradient-to-r from-[#62a230] to-[#2e7d32] rounded-[24px] overflow-hidden">
-          <div className="absolute inset-0 opacity-20">
-             <div className="w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/40 to-transparent scale-150" />
+        <div className="bg-white rounded-[24px] overflow-hidden shadow-sm border border-[#0000000a]">
+          <div className="relative w-full h-[220px] bg-gradient-to-r from-[#5a9a2a] via-[#6db33f] to-[#5a9a2a]">
+            {/* Design elements for the banner curve */}
+            <div className="absolute inset-0 overflow-hidden">
+              <div className="absolute top-[-50%] left-[-10%] w-[120%] h-[200%] bg-[#4c8a20] rounded-[100%] opacity-40 transform translate-y-[30%] translate-x-[5%]" />
+              <div className="absolute top-[-40%] left-[-5%] w-[110%] h-[180%] bg-[#7dc242] rounded-[100%] opacity-30 transform translate-y-[20%] translate-x-[-5%]" />
+            </div>
           </div>
           
-          <div className="absolute bottom-6 left-6 flex items-end gap-6">
-            <div className="relative">
-              <Avatar className="w-32 h-32 border-4 border-white shadow-xl">
-                <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=Siti" />
-                <AvatarFallback>SA</AvatarFallback>
-              </Avatar>
-            </div>
-            <div className="pb-2 text-white">
-              <h1 className="text-3xl font-bold">Siti Arlina</h1>
-              <div className="flex items-center gap-2 text-white/80 mt-1">
-                <Badge variant="secondary" className="bg-white/20 text-white border-0">📺 Smart TV</Badge>
+          <div className="px-8 pb-4 -mt-12 relative flex items-end justify-between">
+            <div className="flex items-end gap-5">
+              <div className="relative">
+                <Avatar className="w-32 h-32 border-[6px] border-white shadow-lg">
+                  <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=Siti" />
+                  <AvatarFallback>SA</AvatarFallback>
+                </Avatar>
+              </div>
+              <div className="pb-2">
+                <h1 className="text-2xl font-bold text-[#222f36]">Siti Arlina</h1>
+                <div className="flex items-center gap-2 mt-1">
+                  <Badge variant="secondary" className="bg-[#f0f9ff] text-[#0284c7] border border-[#bae6fd] text-[10px] py-0.5 px-2 flex items-center gap-1 font-medium rounded-md">
+                    <img src="/figmaAssets/frame-1171275705.svg" className="w-3 h-3 grayscale contrast-200" alt="" />
+                    Smart TV
+                  </Badge>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="absolute bottom-6 right-8 flex gap-8 text-white text-center">
-            <div>
-              <p className="text-2xl font-bold">1.2M</p>
-              <p className="text-xs text-white/70">Followers</p>
+            <div className="flex items-center gap-12 pb-2">
+              <div className="text-center">
+                <p className="text-xl font-bold text-[#222f36]">1.2M</p>
+                <p className="text-[10px] text-[#7b848f] font-medium uppercase tracking-wider">Followers</p>
+              </div>
+              <div className="w-px h-8 bg-[#e2e8f0]" />
+              <div className="text-center">
+                <p className="text-xl font-bold text-[#222f36]">124</p>
+                <p className="text-[10px] text-[#7b848f] font-medium uppercase tracking-wider">Following</p>
+              </div>
+              <div className="w-px h-8 bg-[#e2e8f0]" />
+              <div className="text-center">
+                <p className="text-xl font-bold text-[#222f36]">12%</p>
+                <p className="text-[10px] text-[#7b848f] font-medium uppercase tracking-wider">Positive</p>
+              </div>
+              <div className="w-px h-8 bg-[#e2e8f0]" />
+              <div className="text-center">
+                <p className="text-xl font-bold text-[#222f36]">326</p>
+                <p className="text-[10px] text-[#7b848f] font-medium uppercase tracking-wider">Post</p>
+              </div>
+              
+              <div className="flex items-center gap-2 ml-4">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="text-[#7b848f] hover:bg-gray-100 rounded-lg">
+                      <MoreVertical className="w-5 h-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56 rounded-xl p-2 shadow-xl border-[#0000000d]">
+                    <DropdownMenuItem className="flex items-center gap-2 text-[#222f36] cursor-pointer py-2.5">
+                      <UserX className="w-4 h-4 text-gray-400" /> Block Account Temporary
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="flex items-center gap-2 text-[#222f36] cursor-pointer py-2.5 border-t border-gray-50">
+                      <ShieldAlert className="w-4 h-4 text-gray-400" /> Suspend User Account
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
-            <div className="w-px h-10 bg-white/20 self-center" />
-            <div>
-              <p className="text-2xl font-bold">124</p>
-              <p className="text-xs text-white/70">Following</p>
-            </div>
-            <div className="w-px h-10 bg-white/20 self-center" />
-            <div>
-              <p className="text-2xl font-bold">12%</p>
-              <p className="text-xs text-white/70">Positive</p>
-            </div>
-            <div className="w-px h-10 bg-white/20 self-center" />
-            <div>
-              <p className="text-2xl font-bold">326</p>
-              <p className="text-xs text-white/70">Post</p>
-            </div>
-            
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-white hover:bg-white/10 ml-4">
-                  <MoreVertical className="w-6 h-6" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 rounded-xl p-2">
-                <DropdownMenuItem className="flex items-center gap-2 text-red-600 focus:text-red-600 cursor-pointer">
-                  <UserX className="w-4 h-4" /> Block Account Temporary
-                </DropdownMenuItem>
-                <DropdownMenuItem className="flex items-center gap-2 text-red-600 focus:text-red-600 cursor-pointer">
-                  <ShieldAlert className="w-4 h-4" /> Suspend User Account
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
           </div>
         </div>
 

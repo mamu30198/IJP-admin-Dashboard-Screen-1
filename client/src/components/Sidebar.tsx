@@ -42,7 +42,7 @@ const otherMenuItems: MenuItem[] = [
   { title: "Sign Out", url: "/auth", icon: LogOut },
 ];
 
-export function Sidebar({ className }: { className?: string }) {
+export function Sidebar({ className, activeModule }: { className?: string; activeModule?: string }) {
   const [location] = useLocation();
 
   return (
@@ -79,7 +79,7 @@ export function Sidebar({ className }: { className?: string }) {
           </p>
           <nav className="space-y-1">
             {mainMenuItems.map((item) => {
-              const isActive = location === item.url;
+              const isActive = location === item.url || activeModule === item.title;
               return (
                 <Link key={item.title} href={item.url} asChild>
                   <a
