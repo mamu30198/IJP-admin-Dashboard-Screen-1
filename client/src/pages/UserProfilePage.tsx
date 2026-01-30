@@ -245,8 +245,7 @@ export default function UserProfilePage() {
                 <div 
                   key={post.id} 
                   className={cn(
-                    "aspect-[4/3] rounded-[24px] overflow-hidden shadow-sm hover:shadow-md transition-all group cursor-pointer bg-white border",
-                    post.type === "sponsored" || post.type === "fav" ? "border-[#e2e8f0]" : "border-transparent"
+                    "aspect-[4/3] rounded-[24px] overflow-hidden shadow-sm hover:shadow-md transition-all group cursor-pointer bg-white border border-[#e2e8f0]",
                   )}
                 >
                   <img src={post.image} alt="User Post" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -298,8 +297,8 @@ export default function UserProfilePage() {
       )}
 
       <Dialog open={showBlockDialog} onOpenChange={setShowBlockDialog}>
-        <DialogContent className="max-w-[500px] rounded-[24px] p-0 overflow-hidden border-none shadow-2xl bg-white">
-          <div className="p-10 space-y-6 text-center relative">
+        <DialogContent className="max-w-[480px] rounded-[24px] p-0 overflow-hidden border-none shadow-2xl bg-white">
+          <div className="p-8 space-y-6 text-center relative">
             <button 
               onClick={() => setShowBlockDialog(false)} 
               className="absolute right-6 top-6 w-8 h-8 rounded-full border border-gray-100 flex items-center justify-center text-gray-400 hover:bg-gray-50 transition-colors"
