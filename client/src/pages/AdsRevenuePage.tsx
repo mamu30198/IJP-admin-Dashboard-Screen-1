@@ -29,10 +29,16 @@ import { Progress } from "@/components/ui/progress";
 import {
   Sheet,
   SheetContent,
-  SheetHeader,
-  SheetTitle,
   SheetClose,
 } from "@/components/ui/sheet";
+import {
+  Dialog,
+  DialogContent,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 const stats = [
   { 
@@ -121,6 +127,8 @@ const topAdSpenders: AdVendor[] = [
 export default function AdsRevenuePage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedVendor, setSelectedVendor] = useState<AdVendor | null>(null);
+  const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
+  const [closeReason, setCloseReason] = useState("custom");
   const itemsPerPage = 5;
   
   const totalPages = Math.ceil(topAdSpenders.length / itemsPerPage);
@@ -396,7 +404,11 @@ export default function AdsRevenuePage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Button variant="outline" className="bg-white border-0 text-[11px] font-bold text-[#222f36] h-9 px-4 rounded-lg flex items-center gap-2 shadow-sm hover:bg-white/90">
+                  <Button 
+                    variant="outline" 
+                    className="bg-white border-0 text-[11px] font-bold text-[#222f36] h-9 px-4 rounded-lg flex items-center gap-2 shadow-sm hover:bg-white/90"
+                    onClick={() => setIsCloseModalOpen(true)}
+                  >
                     <AlertCircle className="w-4 h-4 text-[#7b848f]" /> Close Add
                   </Button>
                   <Button variant="link" className="text-[#62a230] text-[11px] font-bold p-0 hover:no-underline">View Profile</Button>
@@ -560,6 +572,60 @@ export default function AdsRevenuePage() {
             </div>
           </SheetContent>
         </Sheet>
+
+        {/* Why Are You Closing this ad? Modal */}
+        <Dialog open={isCloseModalOpen} onOpenChange={setIsCloseModalOpen}>
+          <DialogContent className="max-w-[480px] p-8 rounded-[30px] bg-[#f8f9fa] border-0 shadow-2xl">
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-bold text-[#222f36] text-center w-full">Why Are You Closing this ad ?</h2>
+                <DialogClose asChild>
+                  <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full absolute right-4 top-4 hover:bg-gray-200">
+                    <X className="w-4 h-4 text-[#7b848f]" />
+                  </Button>
+                </DialogClose>
+              </div>
+
+              <RadioGroup value={closeReason} onValueChange={setCloseReason} className="space-y-3">
+                {[
+                  "Inappropriate Content",
+                  "Spam Content",
+                  "Inappropriate Content",
+                  "Inappropriate Content",
+                ].map((reason, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-4 bg-white rounded-2xl border border-transparent hover:border-gray-100 transition-all shadow-sm">
+                    <Label className="text-sm font-medium text-[#7b848f] cursor-pointer w-full" htmlFor={`reason-${idx}`}>
+                      {reason}
+                    </Label>
+                    <RadioGroupItem value={`reason-${idx}`} id={`reason-${idx}`} className="border-[#edf1f3] text-[#62a230]" />
+                  </div>
+                ))}
+                
+                <div className="p-4 bg-white rounded-2xl border border-transparent shadow-sm">
+                  <div className="flex items-center justify-between mb-3">
+                    <Label className="text-sm font-bold text-[#222f36] cursor-pointer" htmlFor="reason-custom">
+                      Custom Reason
+                    </Label>
+                    <RadioGroupItem value="custom" id="reason-custom" className="border-[#edf1f3] text-[#62a230]" />
+                  </div>
+                  {closeReason === "custom" && (
+                    <Textarea 
+                      placeholder="Write Something" 
+                      className="min-h-[100px] bg-[#f8f9fa] border-gray-100 rounded-xl text-xs resize-none placeholder:text-gray-300"
+                    />
+                  )}
+                </div>
+              </RadioGroup>
+
+              <Button 
+                className="w-full h-12 bg-[#62a230] hover:bg-[#62a230]/90 text-white font-bold rounded-xl shadow-lg shadow-[#62a230]/20 mt-4 transition-all active:scale-[0.98]"
+                onClick={() => setIsCloseModalOpen(false)}
+              >
+                Submit
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </main>
     </div>
   );
