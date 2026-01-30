@@ -385,11 +385,7 @@ export default function AdsRevenuePage() {
         </Card>
 
         {/* Vendor Detail View Drawer (Right-side Sheet) */}
-        <Sheet open={!!selectedVendor} onOpenChange={(open) => {
-          if (!open && !isCloseModalOpen) {
-            setSelectedVendor(null);
-          }
-        }}>
+        <Sheet open={!!selectedVendor} onOpenChange={() => setSelectedVendor(null)}>
           <SheetContent side="right" className="sm:max-w-[850px] w-full bg-[#f5f6fa] border-l-0 p-0 overflow-y-auto overflow-x-hidden">
             <div className="p-4 md:p-6 space-y-6">
               <div className="flex items-center justify-between">
@@ -411,7 +407,10 @@ export default function AdsRevenuePage() {
                   <Button 
                     variant="outline" 
                     className="bg-white border-0 text-[11px] font-bold text-[#222f36] h-9 px-4 rounded-lg flex items-center gap-2 shadow-sm hover:bg-white/90"
-                    onClick={() => setIsCloseModalOpen(true)}
+                    onClick={() => {
+                      setSelectedVendor(null);
+                      setIsCloseModalOpen(true);
+                    }}
                   >
                     <AlertCircle className="w-4 h-4 text-[#7b848f]" /> Close Add
                   </Button>
