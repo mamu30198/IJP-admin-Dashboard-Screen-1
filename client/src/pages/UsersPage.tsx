@@ -15,31 +15,31 @@ const stats = [
     title: "Total Users", 
     value: "1,234", 
     icon: "/figmaAssets/frame-1171275705.svg",
-    bg: "bg-[#f3e8ff]" 
+    bg: "bg-white" 
   },
   { 
     title: "Active Users", 
     value: "1,234", 
     icon: "/figmaAssets/frame-1171275704-2.svg",
-    bg: "bg-[#f0fdf4]" 
+    bg: "bg-white" 
   },
   { 
     title: "InActive Users", 
     value: "1,234", 
     icon: "/figmaAssets/frame-1171275704-3.svg",
-    bg: "bg-[#f1f5f9]" 
+    bg: "bg-white" 
   },
   { 
     title: "Total Vendors", 
     value: "1,234", 
     icon: "/figmaAssets/frame-1171275704-1.svg",
-    bg: "bg-[#eff6ff]" 
+    bg: "bg-white" 
   },
   { 
     title: "Total User Reports", 
     value: "1,234", 
     icon: "/figmaAssets/frame-1171275704-4.svg",
-    bg: "bg-[#fef2f2]" 
+    bg: "bg-white" 
   },
 ];
 
@@ -106,7 +106,7 @@ export default function UsersPage() {
                   <p className="text-[11px] font-medium text-[#7b848f] uppercase tracking-wider">{stat.title}</p>
                   <p className="text-2xl font-bold text-[#222f36]">{stat.value}</p>
                 </div>
-                <div className={cn("w-12 h-12 rounded-full flex items-center justify-center", stat.bg)}>
+                <div className="w-12 h-12 rounded-full flex items-center justify-center border border-[#edf1f3]">
                   <img src={stat.icon} alt={stat.title} className="w-6 h-6" />
                 </div>
               </CardContent>
