@@ -385,7 +385,11 @@ export default function AdsRevenuePage() {
         </Card>
 
         {/* Vendor Detail View Drawer (Right-side Sheet) */}
-        <Sheet open={!!selectedVendor} onOpenChange={() => setSelectedVendor(null)}>
+        <Sheet open={!!selectedVendor} onOpenChange={(open) => {
+          if (!open && !isCloseModalOpen) {
+            setSelectedVendor(null);
+          }
+        }}>
           <SheetContent side="right" className="sm:max-w-[850px] w-full bg-[#f5f6fa] border-l-0 p-0 overflow-y-auto overflow-x-hidden">
             <div className="p-4 md:p-6 space-y-6">
               <div className="flex items-center justify-between">
