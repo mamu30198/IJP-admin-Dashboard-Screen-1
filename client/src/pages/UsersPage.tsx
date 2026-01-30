@@ -100,17 +100,15 @@ export default function UsersPage() {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {stats.map((stat, i) => (
-            <Card key={i} className="border-0 shadow-[0px_1px_2px_#0000000d] rounded-[15px]">
-              <CardContent className="p-5 flex items-center justify-between">
-                <div className="space-y-1">
-                  <p className="text-[11px] font-medium text-[#7b848f] uppercase tracking-wider">{stat.title}</p>
-                  <p className="text-2xl font-bold text-[#222f36]">{stat.value}</p>
-                </div>
-                <div className="w-12 h-12 rounded-full flex items-center justify-center border border-[#edf1f3]">
-                  <img src={stat.icon} alt={stat.title} className="w-6 h-6" />
-                </div>
-              </CardContent>
-            </Card>
+            <div key={i} className="bg-white border-0 shadow-[0px_1px_2px_#0000000d] rounded-[15px] p-5 flex items-center justify-between">
+              <div className="space-y-1">
+                <p className="text-[11px] font-medium text-[#7b848f] uppercase tracking-wider">{stat.title}</p>
+                <p className="text-2xl font-bold text-[#222f36]">{stat.value}</p>
+              </div>
+              <div className="w-12 h-12 rounded-full flex items-center justify-center border border-[#edf1f3] bg-white">
+                <img src={stat.icon} alt={stat.title} className="w-6 h-6" />
+              </div>
+            </div>
           ))}
         </div>
 
@@ -140,12 +138,12 @@ export default function UsersPage() {
             </Card>
           </div>
           
-          <Card className="lg:col-span-8 border-0 shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-lg font-semibold text-[#222f36]">Daily Active Users</CardTitle>
+          <div className="lg:col-span-8 bg-white border-0 shadow-[0px_1px_2px_#0000000d] rounded-[15px] p-6">
+            <div className="flex flex-row items-center justify-between pb-4">
+              <h3 className="text-lg font-semibold text-[#222f36]">Daily Active Users</h3>
               <Badge variant="outline" className="text-[#7b848f] border-[#7b848f]">2 Oct to 18 Oct, 2025</Badge>
-            </CardHeader>
-            <CardContent className="h-[250px]">
+            </div>
+            <div className="h-[250px]">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={chartData}>
                   <defs>
@@ -161,8 +159,8 @@ export default function UsersPage() {
                   <Area type="monotone" dataKey="value" stroke="#62a230" strokeWidth={2} fillOpacity={1} fill="url(#colorValue)" />
                 </AreaChart>
               </ResponsiveContainer>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
 
         {/* Filters */}
@@ -184,9 +182,9 @@ export default function UsersPage() {
         </div>
 
         {/* Users Table */}
-        <Card className="border-0 shadow-sm overflow-hidden">
+        <div className="bg-white border-0 shadow-[0px_1px_2px_#0000000d] rounded-[15px] overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+            <table className="w-full text-left border-collapse bg-white">
               <thead>
                 <tr className="bg-[#f8fafc] border-b">
                   <th className="p-4 text-xs font-medium text-[#7b848f] uppercase">Name</th>
@@ -200,9 +198,9 @@ export default function UsersPage() {
                   <th className="p-4 text-xs font-medium text-[#7b848f] uppercase"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y">
+              <tbody className="divide-y divide-slate-100">
                 {users.map((user) => (
-                  <tr key={user.id} className="hover:bg-[#f8fafc] transition-colors">
+                  <tr key={user.id} className="hover:bg-[#f8fafc] transition-colors bg-white">
                     <td className="p-4">
                       <div className="flex items-center gap-3">
                         <Avatar className="w-8 h-8">
@@ -250,7 +248,7 @@ export default function UsersPage() {
               </tbody>
             </table>
           </div>
-          <div className="p-4 border-t flex items-center justify-between">
+          <div className="p-4 border-t flex items-center justify-between bg-white">
             <p className="text-xs text-[#7b848f]">Showing 1 to 100 list in 1 page</p>
             <div className="flex items-center gap-2">
               <Button variant="ghost" size="icon" className="w-8 h-8 rounded-lg"><ChevronLeft className="w-4 h-4" /></Button>
@@ -262,7 +260,7 @@ export default function UsersPage() {
               <Button variant="ghost" size="icon" className="w-8 h-8 rounded-lg"><ChevronRight className="w-4 h-4" /></Button>
             </div>
           </div>
-        </Card>
+        </div>
       </main>
     </div>
   );
