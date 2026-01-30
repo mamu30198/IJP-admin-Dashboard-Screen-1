@@ -45,7 +45,7 @@ const followersData = [
 ];
 
 export default function UserProfilePage() {
-  const [showFollowers, setShowFollowers] = useState(false);
+  const [drawerType, setDrawerType] = useState<"Followers" | "Following" | null>(null);
 
   return (
     <div className="flex bg-[#f5f6fa] w-full min-h-screen relative overflow-hidden">
@@ -83,17 +83,20 @@ export default function UserProfilePage() {
 
             <div className="flex items-center gap-12 pb-2">
               <button 
-                onClick={() => setShowFollowers(true)}
+                onClick={() => setDrawerType("Followers")}
                 className="text-center group transition-all"
               >
                 <p className="text-xl font-bold text-[#222f36] group-hover:text-[#62a230]">1.2M</p>
                 <p className="text-[10px] text-[#7b848f] font-medium uppercase tracking-wider">Followers</p>
               </button>
               <div className="w-px h-8 bg-[#e2e8f0]" />
-              <div className="text-center">
-                <p className="text-xl font-bold text-[#222f36]">124</p>
+              <button 
+                onClick={() => setDrawerType("Following")}
+                className="text-center group transition-all"
+              >
+                <p className="text-xl font-bold text-[#222f36] group-hover:text-[#62a230]">124</p>
                 <p className="text-[10px] text-[#7b848f] font-medium uppercase tracking-wider">Following</p>
-              </div>
+              </button>
               <div className="w-px h-8 bg-[#e2e8f0]" />
               <div className="text-center">
                 <p className="text-xl font-bold text-[#222f36]">12%</p>
@@ -214,60 +217,60 @@ export default function UserProfilePage() {
         </div>
       </main>
 
-      {/* Followers Side Component */}
-      {showFollowers && (
+      {/* Side Component (Followers/Following) */}
+      {drawerType && (
         <>
           <div 
             className="fixed inset-0 bg-black/10 z-40 transition-opacity backdrop-blur-[2px]" 
-            onClick={() => setShowFollowers(false)} 
+            onClick={() => setDrawerType(null)} 
           />
           <div className="fixed right-0 top-0 bottom-0 w-[380px] bg-white shadow-2xl z-50 flex flex-col p-6 animate-in slide-in-from-right duration-300 rounded-l-[32px]">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-bold text-[#222f36]">Followers</h2>
+              <h2 className="text-2xl font-bold text-[#222f36]">{drawerType}</h2>
               <div className="flex items-center gap-3">
-                <span className="text-sm font-semibold text-[#7b848f]">920k</span>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="w-9 h-9 hover:bg-gray-100 rounded-full text-[#7b848f]"
-                  onClick={() => setShowFollowers(false)}
+                <span className="text-sm font-semibold text-[#7b848f]">
+                  {drawerType === "Followers" ? "920k" : "102k"}
+                </span>
+                <button 
+                  className="w-9 h-9 hover:bg-gray-100 rounded-full text-[#7b848f] flex items-center justify-center transition-colors"
+                  onClick={() => setDrawerType(null)}
                 >
                   <ChevronRight className="w-6 h-6" />
-                </Button>
+                </button>
               </div>
             </div>
 
             <div className="relative mb-8">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7b848f]" />
               <Input 
-                placeholder="Search followers..." 
+                placeholder={`Search ${drawerType.toLowerCase()}...`}
                 className="pl-11 h-12 bg-[#f8fafc] border-none rounded-xl text-sm focus-visible:ring-1 focus-visible:ring-[#62a230]"
               />
             </div>
 
             <div className="flex-1 overflow-y-auto space-y-5 pr-2 custom-scrollbar">
-              {followersData.map((follower, i) => (
+              {(drawerType === "Followers" ? followersData : followersData).map((user, i) => (
                 <div key={i} className="flex items-center justify-between group py-1">
                   <div className="flex items-center gap-4">
                     <Avatar className="w-12 h-12 border-2 border-white shadow-sm ring-1 ring-gray-100">
-                      <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=Follower${i}`} />
+                      <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${drawerType}${i}`} />
                       <AvatarFallback>U</AvatarFallback>
                     </Avatar>
                     <div className="space-y-0.5">
-                      <p className="text-[14px] font-bold text-[#222f36]">{follower.name}</p>
-                      <p className="text-[11px] text-[#7b848f] font-medium">{follower.username}</p>
+                      <p className="text-[14px] font-bold text-[#222f36]">{user.name}</p>
+                      <p className="text-[11px] text-[#7b848f] font-medium">{user.username}</p>
                     </div>
                   </div>
                   <Button 
-                    variant={follower.followed ? "ghost" : "default"} 
+                    variant={user.followed ? "ghost" : "default"} 
                     className={cn(
                       "h-9 px-6 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all",
-                      follower.followed 
+                      user.followed 
                         ? "bg-[#f0fdf4] text-[#62a230] hover:bg-[#dcfce7] border border-[#62a230]/20" 
                         : "bg-[#62a230] text-white hover:bg-[#548a29] shadow-sm shadow-[#62a230]/20"
                     )}
                   >
-                    {follower.followed ? "Following" : "Follow"}
+                    {user.followed ? "Following" : "Follow"}
                   </Button>
                 </div>
               ))}
