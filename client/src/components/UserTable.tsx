@@ -12,13 +12,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, ChevronLeft, ChevronRight, UserX, ShieldAlert } from "lucide-react";
+import { MoreHorizontal, ChevronLeft, ChevronRight, UserX, ShieldAlert, X } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogOverlay,
+} from "@/components/ui/dialog";
 
 export interface User {
   id: string | number;
@@ -42,7 +47,76 @@ interface UserTableProps {
 }
 
 export function UserTable({ users, onPageChange, currentPage = 2, showUnblockButton = false, onUnblock }: UserTableProps) {
+  const [showUnblockDialog, setShowUnblockDialog] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+  const handleUnblockClick = (user: User) => {
+    setSelectedUser(user);
+    setShowUnblockDialog(true);
+  };
+
+  const handleConfirmUnblock = () => {
+    if (selectedUser) {
+      onUnblock?.(selectedUser.id);
+    }
+    setShowUnblockDialog(false);
+    setSelectedUser(null);
+  };
+
+  const handleCancelUnblock = () => {
+    setShowUnblockDialog(false);
+    setSelectedUser(null);
+  };
+
   return (
+    <>
+    <Dialog open={showUnblockDialog} onOpenChange={setShowUnblockDialog}>
+      <DialogContent className="sm:max-w-[480px] p-0 gap-0 rounded-2xl border-0 shadow-xl">
+        <div className="relative p-6">
+          <button
+            onClick={handleCancelUnblock}
+            className="absolute right-4 top-4 text-[#7b848f] hover:text-[#222f36] transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+          
+          <div className="flex flex-col items-center text-center">
+            <div className="flex items-center gap-2 mb-4">
+              <Avatar className="w-12 h-12">
+                <AvatarImage src={selectedUser ? `https://api.dicebear.com/7.x/avataaars/svg?seed=${selectedUser.id}` : ''} />
+                <AvatarFallback>{selectedUser?.name?.charAt(0) || 'U'}</AvatarFallback>
+              </Avatar>
+              <span className="text-base font-medium text-[#222f36]">{selectedUser?.name}</span>
+            </div>
+            
+            <h2 className="text-xl font-semibold text-[#222f36] mb-3">
+              Are you sure you want to Unblock this post User ?
+            </h2>
+            
+            <p className="text-sm text-[#7b848f] mb-6 max-w-[380px]">
+              Lorem ipsum dolor sit amet consectetur. In tincidunt a pellentesque gravida pellentesque suspendisse interdum. Praesent risus non id auctor. Non tortor quis pretium placerat. Vestibulum convallis .
+            </p>
+            
+            <div className="flex gap-4 w-full max-w-[280px]">
+              <Button
+                onClick={handleConfirmUnblock}
+                className="flex-1 bg-[#62a230] hover:bg-[#62a230]/90 text-white rounded-full h-11"
+              >
+                Yes
+              </Button>
+              <Button
+                onClick={handleCancelUnblock}
+                variant="outline"
+                className="flex-1 border-[#e5e7eb] text-[#222f36] hover:bg-[#f8fafc] rounded-full h-11"
+              >
+                No
+              </Button>
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+
     <div className="bg-white border-0 shadow-[0px_1px_2px_#0000000d] rounded-[15px] overflow-hidden">
       <div className="overflow-x-auto">
         <Table>
@@ -109,7 +183,7 @@ export function UserTable({ users, onPageChange, currentPage = 2, showUnblockBut
                       variant="outline" 
                       size="sm" 
                       className="text-[#62a230] border-[#62a230] hover:bg-[#62a230] hover:text-white text-xs px-3 py-1 h-8"
-                      onClick={() => onUnblock?.(user.id)}
+                      onClick={() => handleUnblockClick(user)}
                     >
                       Unblock Account
                     </Button>
@@ -164,6 +238,7 @@ export function UserTable({ users, onPageChange, currentPage = 2, showUnblockBut
         </div>
       </div>
     </div>
+    </>
   );
 }
 
