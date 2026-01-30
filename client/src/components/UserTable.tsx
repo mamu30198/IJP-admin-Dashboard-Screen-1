@@ -28,17 +28,20 @@ export interface User {
   registration: string;
   activity: "High" | "Medium" | "Low";
   reports: string;
-  status: "Active" | "Inactive" | "Suspended";
+  status: "Active" | "Inactive" | "Suspended" | "Blocked";
   completion: number;
+  userType?: "user" | "vendor";
 }
 
 interface UserTableProps {
   users: User[];
   onPageChange?: (page: number) => void;
   currentPage?: number;
+  showUnblockButton?: boolean;
+  onUnblock?: (userId: string | number) => void;
 }
 
-export function UserTable({ users, onPageChange, currentPage = 2 }: UserTableProps) {
+export function UserTable({ users, onPageChange, currentPage = 2, showUnblockButton = false, onUnblock }: UserTableProps) {
   return (
     <div className="bg-white border-0 shadow-[0px_1px_2px_#0000000d] rounded-[15px] overflow-hidden">
       <div className="overflow-x-auto">
@@ -53,7 +56,7 @@ export function UserTable({ users, onPageChange, currentPage = 2 }: UserTablePro
               <TableHead className="p-4 text-xs font-medium text-[#7b848f] uppercase">Reports</TableHead>
               <TableHead className="p-4 text-xs font-medium text-[#7b848f] uppercase">Status</TableHead>
               <TableHead className="p-4 text-xs font-medium text-[#7b848f] uppercase">Profile Completion</TableHead>
-              <TableHead className="p-4"></TableHead>
+              <TableHead className="p-4 text-xs font-medium text-[#7b848f] uppercase">{showUnblockButton ? "More" : ""}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -88,6 +91,7 @@ export function UserTable({ users, onPageChange, currentPage = 2 }: UserTablePro
                   <Badge variant="outline" className={`rounded-full ${
                     user.status === 'Active' ? 'bg-[#e8f5e9] text-[#2e7d32] border-[#2e7d32]/20' : 
                     user.status === 'Inactive' ? 'bg-[#f5f5f5] text-[#757575] border-[#757575]/20' : 
+                    user.status === 'Blocked' ? 'bg-[#ffebee] text-[#c62828] border-[#c62828]/20' :
                     'bg-[#ffebee] text-[#c62828] border-[#c62828]/20'
                   }`}>
                     {user.status}
@@ -100,24 +104,35 @@ export function UserTable({ users, onPageChange, currentPage = 2 }: UserTablePro
                   </div>
                 </TableCell>
                 <TableCell className="p-4">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="text-[#7b848f]">
-                        <MoreHorizontal className="w-4 h-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-48">
-                      <DropdownMenuItem asChild>
-                        <Link href={`/users/${user.id}`} className="cursor-pointer">View Profile</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className="text-red-600 focus:text-red-600 cursor-pointer">
-                        <UserX className="w-4 h-4 mr-2" /> Block Account
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className="text-red-600 focus:text-red-600 cursor-pointer">
-                        <ShieldAlert className="w-4 h-4 mr-2" /> Suspend Account
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  {showUnblockButton ? (
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-[#62a230] border-[#62a230] hover:bg-[#62a230] hover:text-white text-xs px-3 py-1 h-8"
+                      onClick={() => onUnblock?.(user.id)}
+                    >
+                      Unblock Account
+                    </Button>
+                  ) : (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="text-[#7b848f]">
+                          <MoreHorizontal className="w-4 h-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-48">
+                        <DropdownMenuItem asChild>
+                          <Link href={`/users/${user.id}`} className="cursor-pointer">View Profile</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="text-red-600 focus:text-red-600 cursor-pointer">
+                          <UserX className="w-4 h-4 mr-2" /> Block Account
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="text-red-600 focus:text-red-600 cursor-pointer">
+                          <ShieldAlert className="w-4 h-4 mr-2" /> Suspend Account
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )}
                 </TableCell>
               </TableRow>
             ))}

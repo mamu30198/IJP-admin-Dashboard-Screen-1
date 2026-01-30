@@ -51,21 +51,89 @@ const chartData = [
   { name: "9 Oct", value: 190 },
 ];
 
-const users: User[] = Array.from({ length: 10 }).map((_, i) => ({
-  id: i,
-  name: "John Doe",
-  mobile: "+10895XXXX550",
-  city: "New York, USA, 140050",
-  registration: "12-17 oct, 2025",
-  activity: i % 3 === 0 ? "High" : i % 3 === 1 ? "Medium" : "Low",
-  reports: i % 4 === 0 ? "2 reports" : "None",
-  status: i % 3 === 0 ? "Active" : i % 3 === 1 ? "Inactive" : "Suspended",
-  completion: Math.floor(Math.random() * 100),
-}));
+const allUsers: User[] = [
+  ...Array.from({ length: 10 }).map((_, i) => ({
+    id: i,
+    name: "John Doe",
+    mobile: "+10895XXXX550",
+    city: "New York, USA, 140050",
+    registration: "12-17 oct, 2025",
+    activity: (i % 3 === 0 ? "High" : i % 3 === 1 ? "Medium" : "Low") as "High" | "Medium" | "Low",
+    reports: i % 4 === 0 ? "2 reports" : "None",
+    status: (i % 3 === 0 ? "Active" : i % 3 === 1 ? "Inactive" : "Suspended") as "Active" | "Inactive" | "Suspended" | "Blocked",
+    completion: Math.floor(Math.random() * 100),
+    userType: "user" as "user" | "vendor",
+  })),
+  ...Array.from({ length: 5 }).map((_, i) => ({
+    id: 100 + i,
+    name: "Jane Vendor",
+    mobile: "+10895XXXX550",
+    city: "New York, USA, 140050",
+    registration: "12-17 oct, 2025",
+    activity: (i % 3 === 0 ? "High" : i % 3 === 1 ? "Medium" : "Low") as "High" | "Medium" | "Low",
+    reports: i % 2 === 0 ? "2 reports" : "None",
+    status: "Active" as "Active" | "Inactive" | "Suspended" | "Blocked",
+    completion: Math.floor(Math.random() * 100),
+    userType: "vendor" as "user" | "vendor",
+  })),
+  ...Array.from({ length: 8 }).map((_, i) => ({
+    id: 200 + i,
+    name: "Blocked User " + (i + 1),
+    mobile: "+10895XXXX550",
+    city: "New York, USA, 140050",
+    registration: "12-17 oct, 2025",
+    activity: (i % 3 === 0 ? "High" : i % 3 === 1 ? "Medium" : "Low") as "High" | "Medium" | "Low",
+    reports: "2 reports",
+    status: "Blocked" as "Active" | "Inactive" | "Suspended" | "Blocked",
+    completion: Math.floor(Math.random() * 100),
+    userType: "user" as "user" | "vendor",
+  })),
+];
+
+type TabType = "all" | "users" | "vendors" | "blocked" | "suspended";
 
 export default function UsersPage() {
   const [search, setSearch] = useState("");
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const [activeTab, setActiveTab] = useState<TabType>("all");
+  const [users, setUsers] = useState(allUsers);
+
+  const filteredUsers = users.filter((user) => {
+    const searchLower = search.toLowerCase();
+    const matchesSearch = 
+      user.name.toLowerCase().includes(searchLower) ||
+      user.mobile.toLowerCase().includes(searchLower) ||
+      user.city.toLowerCase().includes(searchLower);
+
+    switch (activeTab) {
+      case "all":
+        return matchesSearch && user.status !== "Blocked";
+      case "users":
+        return matchesSearch && user.userType === "user" && user.status !== "Blocked";
+      case "vendors":
+        return matchesSearch && user.userType === "vendor" && user.status !== "Blocked";
+      case "blocked":
+        return matchesSearch && user.status === "Blocked";
+      case "suspended":
+        return matchesSearch && user.status === "Suspended";
+      default:
+        return matchesSearch;
+    }
+  });
+
+  const handleUnblock = (userId: string | number) => {
+    setUsers(prev => prev.map(user => 
+      user.id === userId ? { ...user, status: "Active" as const } : user
+    ));
+  };
+
+  const tabs: { key: TabType; label: string }[] = [
+    { key: "all", label: "All User" },
+    { key: "users", label: "Only Users" },
+    { key: "vendors", label: "Vendors" },
+    { key: "blocked", label: "Blocked users" },
+    { key: "suspended", label: "Suspended" },
+  ];
 
   return (
     <div className="flex bg-[#f5f6fa] w-full min-h-screen">
@@ -165,11 +233,20 @@ export default function UsersPage() {
         {/* Filters */}
         <div className="flex flex-col xl:flex-row xl:items-center gap-4 bg-white p-3 rounded-xl shadow-sm">
           <div className="flex flex-wrap items-center gap-2">
-            <Button variant="ghost" className="bg-[#62a230] text-white hover:bg-[#62a230]/90 px-3 py-1 h-9 text-sm">All User</Button>
-            <Button variant="ghost" className="text-[#7b848f] px-3 py-1 h-9 text-sm">Only Users</Button>
-            <Button variant="ghost" className="text-[#7b848f] px-3 py-1 h-9 text-sm">Vendors</Button>
-            <Button variant="ghost" className="text-[#7b848f] px-3 py-1 h-9 text-sm">Suspended</Button>
-            <Button variant="ghost" className="text-[#7b848f] px-3 py-1 h-9 text-sm">Blocked users</Button>
+            {tabs.map((tab) => (
+              <Button
+                key={tab.key}
+                variant="ghost"
+                className={`px-3 py-1 h-9 text-sm ${
+                  activeTab === tab.key
+                    ? "bg-[#62a230] text-white hover:bg-[#62a230]/90"
+                    : "text-[#7b848f] hover:text-[#222f36]"
+                }`}
+                onClick={() => setActiveTab(tab.key)}
+              >
+                {tab.label}
+              </Button>
+            ))}
           </div>
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7b848f]" />
@@ -182,7 +259,11 @@ export default function UsersPage() {
           </div>
         </div>
 
-        <UserTable users={users} />
+        <UserTable 
+          users={filteredUsers} 
+          showUnblockButton={activeTab === "blocked"}
+          onUnblock={handleUnblock}
+        />
       </main>
     </div>
   );
