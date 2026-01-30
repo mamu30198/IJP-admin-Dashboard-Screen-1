@@ -298,42 +298,42 @@ export default function UserProfilePage() {
       )}
 
       <Dialog open={showBlockDialog} onOpenChange={setShowBlockDialog}>
-        <DialogContent className="max-w-[550px] rounded-[24px] p-0 overflow-hidden border-none shadow-2xl bg-white">
-          <div className="p-12 space-y-8 text-center relative">
+        <DialogContent className="max-w-[500px] rounded-[24px] p-0 overflow-hidden border-none shadow-2xl bg-white">
+          <div className="p-10 space-y-6 text-center relative">
             <button 
               onClick={() => setShowBlockDialog(false)} 
-              className="absolute right-8 top-8 w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-gray-400 hover:bg-gray-50 transition-colors"
+              className="absolute right-6 top-6 w-8 h-8 rounded-full border border-gray-100 flex items-center justify-center text-gray-400 hover:bg-gray-50 transition-colors"
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4" />
             </button>
             
-            <div className="flex flex-col items-center gap-6">
-              <div className="flex items-center gap-3">
-                <Avatar className="w-10 h-10 rounded-lg">
+            <div className="flex flex-col items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Avatar className="w-8 h-8 rounded-lg">
                   <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" />
                   <AvatarFallback>JD</AvatarFallback>
                 </Avatar>
-                <span className="text-xl font-bold text-[#222f36]">John Doe</span>
+                <span className="text-base font-bold text-[#222f36]">John Doe</span>
               </div>
-              <h2 className="text-[32px] font-bold text-[#222f36] leading-tight max-w-[450px]">
-                Are you sure you want to block this post User ?
+              <h2 className="text-[24px] font-bold text-[#222f36] leading-tight max-w-[400px]">
+                Are you sure you want to block this user?
               </h2>
-              <p className="text-lg text-[#7b848f] leading-relaxed px-4">
-                Lorem ipsum dolor sit amet consectetur. In tincidunt a pellentesque gravida pellentesque suspendisse interdum. Praesent risus non id auctor. Non tortor quis pretium placerat. Vestibulum convallis.
+              <p className="text-sm text-[#7b848f] leading-relaxed px-4">
+                This action will temporarily restrict the user's access to certain features. You can unblock them at any time from the settings.
               </p>
             </div>
 
-            <div className="flex gap-6 pt-4">
+            <div className="flex gap-4 pt-2">
               <Button 
                 onClick={() => setShowBlockDialog(false)}
-                className="flex-1 h-[60px] bg-[#62a230] hover:bg-[#548a29] text-white font-bold text-[22px] rounded-[16px] transition-all shadow-lg shadow-[#62a230]/20"
+                className="flex-1 h-[48px] bg-[#62a230] hover:bg-[#548a29] text-white font-bold text-lg rounded-[12px] transition-all shadow-md shadow-[#62a230]/20"
               >
                 Yes
               </Button>
               <Button 
                 variant="secondary"
                 onClick={() => setShowBlockDialog(false)}
-                className="flex-1 h-[60px] bg-[#f8fafc] hover:bg-[#f1f5f9] text-[#7b848f] font-bold text-[22px] rounded-[16px] transition-all border border-gray-100"
+                className="flex-1 h-[48px] bg-[#f8fafc] hover:bg-[#f1f5f9] text-[#7b848f] font-bold text-lg rounded-[12px] transition-all border border-gray-100"
               >
                 No
               </Button>
