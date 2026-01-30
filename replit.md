@@ -4,6 +4,15 @@
 
 This is an admin dashboard application for managing users, vendors, posts, and revenue analytics. The project follows a full-stack TypeScript architecture with a React frontend and Express backend. It appears to be designed for an "IJP Admin" platform that includes features like user management, vendor risk assessment, AI-powered fraud detection alerts, and analytics visualization.
 
+## Recent Changes
+
+- **January 30, 2026**: Implemented AI Intelligence Center page matching Figma design with:
+  - Filter tabs (All Insights, Fraud & Abuse, Vendor Risk, Revenue, Platform Health, Moderation)
+  - Alert cards list with color-coded categories and percentage indicators
+  - Detailed alert panel with Evidence & Findings, Affected Vendors, AI Recommendation
+  - Interactive selection between alert cards
+  - Simplified Vite config for development server on port 5000
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
