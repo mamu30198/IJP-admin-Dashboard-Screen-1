@@ -66,6 +66,21 @@ export function setupAuth(app: Express) {
     }
   });
 
+  // Seed Admin User
+  (async () => {
+    const adminUsername = "admin";
+    const adminPassword = "password123";
+    const existing = await storage.getUserByUsername(adminUsername);
+    if (!existing) {
+      const hashedPassword = await hashPassword(adminPassword);
+      await storage.createUser({
+        username: adminUsername,
+        password: hashedPassword,
+      });
+      console.log(`Admin user created: ${adminUsername} / ${adminPassword}`);
+    }
+  })();
+
   app.post("/api/register", async (req, res, next) => {
     try {
       const existingUser = await storage.getUserByUsername(req.body.username);

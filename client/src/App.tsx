@@ -1,10 +1,9 @@
-import { Switch, Route } from "wouter";
+import { Route, Switch, Redirect } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
-
 import { DashboardScreen } from "@/pages/DashboardScreen";
 import AuthPage from "@/pages/AuthPage";
 import UsersPage from "@/pages/UsersPage";
@@ -18,26 +17,48 @@ import ContentModerationPage from "@/pages/ContentModerationPage";
 import AdminManagementPage from "@/pages/AdminManagementPage";
 import CommentsPage from "@/pages/CommentsPage";
 import FinancePage from "@/pages/FinancePage";
+import { AuthProvider, useAuth } from "./hooks/use-auth";
+import { Loader2 } from "lucide-react";
+
+function ProtectedRoute({ component: Component, path }: { component: React.ComponentType, path: string }) {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-[#62A230]" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Redirect to="/auth" />;
+  }
+
+  return (
+    <Route path={path}>
+      <Component />
+    </Route>
+  );
+}
 
 function Router() {
   return (
     <Switch>
-      {/* Add pages below */}
       <Route path="/auth" component={AuthPage} />
-      <Route path="/profile" component={UserProfilePage} />
-      <Route path="/users/:id" component={UserProfilePage} />
-      <Route path="/users" component={UsersPage} />
-      <Route path="/revenue" component={AdsRevenuePage} />
-      <Route path="/pricing" component={PricingSettingsPage} />
-      <Route path="/reports" component={ReportsPage} />
-      <Route path="/alerts" component={AlertsPage} />
-      <Route path="/ai-intelligence" component={AIIntelligencePage} />
-      <Route path="/moderation" component={ContentModerationPage} />
-      <Route path="/admin" component={AdminManagementPage} />
-      <Route path="/comments" component={CommentsPage} />
-      <Route path="/finance" component={FinancePage} />
-      <Route path="/" component={DashboardScreen} />
-      {/* Fallback to 404 */}
+      <ProtectedRoute path="/profile" component={UserProfilePage} />
+      <ProtectedRoute path="/users/:id" component={UserProfilePage} />
+      <ProtectedRoute path="/users" component={UsersPage} />
+      <ProtectedRoute path="/revenue" component={AdsRevenuePage} />
+      <ProtectedRoute path="/pricing" component={PricingSettingsPage} />
+      <ProtectedRoute path="/reports" component={ReportsPage} />
+      <ProtectedRoute path="/alerts" component={AlertsPage} />
+      <ProtectedRoute path="/ai-intelligence" component={AIIntelligencePage} />
+      <ProtectedRoute path="/moderation" component={ContentModerationPage} />
+      <ProtectedRoute path="/admin" component={AdminManagementPage} />
+      <ProtectedRoute path="/comments" component={CommentsPage} />
+      <ProtectedRoute path="/finance" component={FinancePage} />
+      <ProtectedRoute path="/" component={DashboardScreen} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -46,10 +67,12 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-      </TooltipProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+        </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
