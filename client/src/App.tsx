@@ -17,6 +17,7 @@ import AIIntelligencePage from "@/pages/AIIntelligencePage";
 import ContentModerationPage from "@/pages/ContentModerationPage";
 import AdminManagementPage from "@/pages/AdminManagementPage";
 import CommentsPage from "@/pages/CommentsPage";
+import FinancePage from "@/pages/FinancePage";
 
 function Router() {
   return (
@@ -33,6 +34,7 @@ function Router() {
       <Route path="/moderation" component={ContentModerationPage} />
       <Route path="/admin" component={AdminManagementPage} />
       <Route path="/comments" component={CommentsPage} />
+      <Route path="/finance" component={FinancePage} />
       <Route path="/" component={DashboardScreen} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
