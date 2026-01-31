@@ -21,7 +21,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 
 export default function UserProfilePage() {
-  const [activeTab, setActiveTab] = useState("Notification Setting");
+  const [activeTab, setActiveTab] = useState("Profile Setting");
   const [showOtp, setShowOtp] = useState(false);
 
   const [notifications, setNotifications] = useState({
@@ -109,91 +109,91 @@ export default function UserProfilePage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left Navigation */}
           <div className="lg:col-span-4">
-            <div className="bg-white rounded-[32px] p-4 border border-gray-50 shadow-sm space-y-2">
+            <div className="bg-white rounded-[32px] p-6 border border-gray-50 shadow-sm space-y-2">
               {tabs.map((tab) => (
                 <button
                   key={tab.name}
                   onClick={() => setActiveTab(tab.name)}
                   className={cn(
-                    "w-full flex items-center justify-between p-5 rounded-2xl transition-all group",
+                    "w-full flex items-center justify-between p-4 rounded-xl transition-all group border border-transparent",
                     activeTab === tab.name 
-                      ? "bg-[#F8FAFC] text-[#2D3748]" 
+                      ? "bg-[#F8FAFC] text-[#72A840] border-[#F1F5F9]" 
                       : "text-gray-400 hover:bg-[#F8FAFC]/50 hover:text-[#2D3748]"
                   )}
                 >
                   <div className="flex items-center gap-4">
-                    <tab.icon className={cn("w-5 h-5", activeTab === tab.name ? "text-[#22C55E]" : "text-gray-400 group-hover:text-[#22C55E]")} />
-                    <span className="text-[15px] font-bold">{tab.name}</span>
+                    <tab.icon className={cn("w-4 h-4", activeTab === tab.name ? "text-[#72A840]" : "text-gray-400 group-hover:text-[#72A840]")} />
+                    <span className="text-[14px] font-bold">{tab.name}</span>
                   </div>
-                  <ChevronRight className={cn("w-4 h-4 transition-transform", activeTab === tab.name ? "text-[#22C55E] translate-x-1" : "text-gray-300")} />
+                  <ChevronRight className={cn("w-3 h-3 transition-transform", activeTab === tab.name ? "text-[#72A840] translate-x-1" : "text-gray-300")} />
                 </button>
               ))}
             </div>
           </div>
 
           {/* Right Content Area */}
-          <div className="lg:col-span-8 space-y-8 bg-white rounded-[32px] p-8 border border-gray-50 shadow-sm">
+          <div className="lg:col-span-8 space-y-8 bg-white rounded-[32px] p-8 border border-gray-50 shadow-sm min-h-[600px]">
             {activeTab === "Profile Setting" ? (
-              <>
-                <div className="bg-[#F8FAFC] rounded-[32px] p-10 border border-gray-100/50">
-                  <div className="flex justify-between items-center mb-10">
-                    <h3 className="text-xl font-bold text-[#2D3748]">Profile Details</h3>
-                    <Button className="bg-[#72A840] hover:bg-[#629235] text-white px-8 rounded-xl h-11 font-bold">
+              <div className="space-y-6">
+                <div className="bg-[#F8FAFC] rounded-[24px] p-8 border border-gray-100">
+                  <div className="flex justify-between items-center mb-8">
+                    <h3 className="text-[18px] font-bold text-[#222f36]">Profile Details</h3>
+                    <Button className="bg-[#72A840] hover:bg-[#629235] text-white px-6 rounded-xl h-10 font-bold text-[13px]">
                       Save changes
                     </Button>
                   </div>
 
-                  <div className="flex gap-10">
+                  <div className="flex items-start gap-12">
                     <div className="flex flex-col items-center gap-3">
-                      <div className="relative">
-                        <Avatar className="w-24 h-24 bg-white rounded-2xl border border-gray-100 shadow-sm p-1">
+                      <div className="relative group">
+                        <Avatar className="w-20 h-20 bg-white rounded-full border border-gray-100 shadow-sm p-0.5">
                           <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=KevinSmall" />
                           <AvatarFallback><User /></AvatarFallback>
                         </Avatar>
-                        <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-full border border-gray-100 flex items-center justify-center shadow-sm">
+                        <div className="absolute bottom-0 right-0 w-6 h-6 bg-white rounded-full border border-gray-100 flex items-center justify-center shadow-sm">
                           <Settings className="w-3 h-3 text-gray-400" />
                         </div>
                       </div>
-                      <span className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider">Profile Picture</span>
+                      <span className="text-[10px] font-bold text-[#94A3B8] uppercase tracking-wider">Profile Picture</span>
                     </div>
 
-                    <div className="flex-1 grid grid-cols-2 gap-6">
-                      <div className="space-y-3">
-                        <label className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider ml-1">First Name</label>
+                    <div className="flex-1 grid grid-cols-2 gap-8">
+                      <div className="space-y-2">
+                        <label className="text-[11px] font-medium text-[#94A3B8] ml-1">First Name</label>
                         <Input 
                           defaultValue="Rupali"
-                          className="h-14 bg-white border border-gray-100/50 rounded-2xl px-6 text-[15px] font-medium text-[#2D3748] focus-visible:ring-2 focus-visible:ring-[#72A840]/20"
+                          className="h-12 bg-white border border-gray-100 rounded-xl px-6 text-[14px] text-[#2D3748] focus-visible:ring-2 focus-visible:ring-[#72A840]/10"
                         />
                       </div>
-                      <div className="space-y-3">
-                        <label className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider ml-1">Last Name</label>
+                      <div className="space-y-2">
+                        <label className="text-[11px] font-medium text-[#94A3B8] ml-1">Last Name</label>
                         <Input 
                           defaultValue="Nandiya"
-                          className="h-14 bg-white border border-gray-100/50 rounded-2xl px-6 text-[15px] font-medium text-[#2D3748] focus-visible:ring-2 focus-visible:ring-[#72A840]/20"
+                          className="h-12 bg-white border border-gray-100 rounded-xl px-6 text-[14px] text-[#2D3748] focus-visible:ring-2 focus-visible:ring-[#72A840]/10"
                         />
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-[#F8FAFC] rounded-[32px] p-10 border border-gray-100/50">
-                  <div className="flex justify-between items-center mb-10">
-                    <h3 className="text-xl font-bold text-[#2D3748]">Email</h3>
+                <div className="bg-[#F8FAFC] rounded-[24px] p-8 border border-gray-100">
+                  <div className="mb-8">
+                    <h3 className="text-[18px] font-bold text-[#222f36]">Email</h3>
                   </div>
 
                   <div className="flex items-end gap-6">
-                    <div className="flex-1 space-y-3">
+                    <div className="flex-1 space-y-2">
                       <Input 
                         defaultValue="RupaliNandiya@gmail.com"
-                        className="h-14 bg-white border border-gray-100/50 rounded-2xl px-6 text-[15px] font-medium text-[#2D3748] focus-visible:ring-2 focus-visible:ring-[#72A840]/20"
+                        className="h-12 bg-white border border-gray-100 rounded-xl px-6 text-[14px] text-[#2D3748] focus-visible:ring-2 focus-visible:ring-[#72A840]/10"
                       />
                     </div>
-                    <Button variant="secondary" className="bg-[#72A840] hover:bg-[#629235] text-white px-10 h-14 rounded-2xl font-bold min-w-[160px]">
+                    <Button variant="secondary" className="bg-[#72A840] hover:bg-[#629235] text-white px-8 h-12 rounded-xl font-bold text-[13px] min-w-[160px]">
                       Update Email
                     </Button>
                   </div>
                 </div>
-              </>
+              </div>
             ) : activeTab === "Notification Setting" ? (
               <div className="space-y-4">
                 {[
