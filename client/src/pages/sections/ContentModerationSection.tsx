@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Bell, Settings, ChevronDown, Eye, EyeOff, Trash2, AlertTriangle, CheckCircle, X, Flag, Shield } from 'lucide-react';
+import { Search, Bell, Settings, ChevronDown, Eye, EyeOff, Trash2, AlertTriangle, CheckCircle, Flag, Shield } from 'lucide-react';
 
 interface FlaggedItem {
   id: string;
@@ -91,12 +91,40 @@ const filterTabs: FilterTab[] = [
   { id: 'abuse', label: 'Abuse', filterType: 'abuse' },
 ];
 
-const getSeverityColor = (severity: string) => {
+const getSeverityStyles = (severity: string) => {
   switch (severity) {
-    case 'high': return { bg: '#FEE2E2', text: '#DC2626', dot: '#EF4444', border: '#EF4444' };
-    case 'medium': return { bg: '#FEF3C7', text: '#D97706', dot: '#F59E0B', border: '#F59E0B' };
-    case 'low': return { bg: '#DCFCE7', text: '#16A34A', dot: '#22C55E', border: '#22C55E' };
-    default: return { bg: '#F3F4F6', text: '#6B7280', dot: '#9CA3AF', border: '#9CA3AF' };
+    case 'high': 
+      return { 
+        dot: '#EF4444', 
+        text: '#EF4444',
+        cardBorder: '#EF4444',
+        cardBg: '#FEF2F2',
+        badge: { bg: '#FEE2E2', text: '#DC2626' }
+      };
+    case 'medium': 
+      return { 
+        dot: '#F59E0B', 
+        text: '#F59E0B',
+        cardBorder: '#F59E0B',
+        cardBg: '#FFFBEB',
+        badge: { bg: '#FEF3C7', text: '#D97706' }
+      };
+    case 'low': 
+      return { 
+        dot: '#22C55E', 
+        text: '#22C55E',
+        cardBorder: '#3B82F6',
+        cardBg: '#EFF6FF',
+        badge: { bg: '#DCFCE7', text: '#16A34A' }
+      };
+    default: 
+      return { 
+        dot: '#9CA3AF', 
+        text: '#6B7280',
+        cardBorder: '#9CA3AF',
+        cardBg: '#F9FAFB',
+        badge: { bg: '#F3F4F6', text: '#6B7280' }
+      };
   }
 };
 
@@ -127,12 +155,12 @@ const ContentModerationSection = () => {
     }
   };
 
-  const severityColors = getSeverityColor(selectedItem.severity);
+  const severityStyles = getSeverityStyles(selectedItem.severity);
 
   return (
     <div className="flex-grow p-6 bg-[#F8FAFC] min-h-screen">
       {/* Header */}
-      <div className="flex justify-between items-center mb-5">
+      <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-3">
           <h1 className="text-[20px] font-semibold text-gray-900">Content Moderation</h1>
           <span className="text-[13px] text-gray-400 border-l border-gray-300 pl-3">
@@ -159,30 +187,30 @@ const ContentModerationSection = () => {
       </div>
 
       {/* Search and Filter Row */}
-      <div className="flex items-center justify-between mb-5">
-        <div className="relative">
+      <div className="flex items-center gap-4 mb-5">
+        <div className="relative flex-1">
           <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
           <input 
             type="text" 
             placeholder="Search by vendor or post ID..." 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 pr-4 py-2 w-[280px] bg-white border border-gray-200 rounded-lg text-[13px] focus:outline-none focus:ring-2 focus:ring-[#22C55E]/20"
+            className="pl-10 pr-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg text-[13px] focus:outline-none focus:ring-2 focus:ring-[#22C55E]/20"
           />
         </div>
         
         {/* Filter Tabs */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           {filterTabs.map((tab) => {
             const isActive = activeFilter === tab.id;
             return (
               <button
                 key={tab.id}
                 onClick={() => handleFilterChange(tab.id)}
-                className={`px-4 py-1.5 rounded-md text-[13px] font-medium transition-all ${
+                className={`px-4 py-2 rounded text-[13px] font-medium transition-all ${
                   isActive
-                    ? 'bg-[#002B20] text-white'
-                    : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                    ? 'bg-[#3B82F6] text-white'
+                    : 'bg-white text-gray-600 hover:bg-gray-50'
                 }`}
               >
                 {tab.label}
@@ -195,42 +223,51 @@ const ContentModerationSection = () => {
       {/* Main Content */}
       <div className="flex gap-5">
         {/* Left Column - Flagged Items */}
-        <div className="w-[380px] flex-shrink-0 space-y-3">
+        <div className="w-[320px] flex-shrink-0 space-y-3">
           {filteredItems.map((item) => {
-            const colors = getSeverityColor(item.severity);
+            const styles = getSeverityStyles(item.severity);
             const isSelected = selectedItem.id === item.id;
             
             return (
               <div
                 key={item.id}
                 onClick={() => setSelectedItem(item)}
-                className={`bg-white rounded-xl p-4 cursor-pointer transition-all border-l-4 shadow-sm ${
-                  isSelected ? 'ring-2 ring-[#22C55E]/30 shadow-md' : 'hover:shadow-md'
+                className={`rounded-xl overflow-hidden cursor-pointer transition-all shadow-sm ${
+                  isSelected ? 'ring-2 ring-[#22C55E]/40 shadow-md' : 'hover:shadow-md'
                 }`}
-                style={{ borderLeftColor: colors.border }}
+                style={{ borderLeft: `4px solid ${styles.cardBorder}` }}
               >
-                <div className="flex justify-between items-start mb-2">
-                  <div className="flex items-center gap-2">
-                    <span 
-                      className="w-2 h-2 rounded-full"
-                      style={{ backgroundColor: colors.dot }}
-                    ></span>
-                    <span 
-                      className="text-[10px] font-bold px-2 py-0.5 rounded uppercase"
-                      style={{ backgroundColor: colors.bg, color: colors.text }}
-                    >
-                      {item.severity}
-                    </span>
+                {/* Card Header */}
+                <div className="bg-white p-3 pb-2">
+                  <div className="flex justify-between items-start mb-1">
+                    <div className="flex items-center gap-1.5">
+                      <span 
+                        className="w-2 h-2 rounded-full"
+                        style={{ backgroundColor: styles.dot }}
+                      ></span>
+                      <span 
+                        className="text-[11px] font-semibold capitalize"
+                        style={{ color: styles.text }}
+                      >
+                        {item.severity}
+                      </span>
+                    </div>
+                    <span className="text-[11px] text-gray-400">{item.reportCount} reports</span>
                   </div>
-                  <span className="text-[12px] text-gray-400">{item.reportCount} reports</span>
+                  
+                  <div>
+                    <h4 className="text-[13px] font-semibold text-gray-900">{item.storeName}</h4>
+                    <p className="text-[10px] text-gray-400">{item.categoryLabel} • {item.postId}</p>
+                  </div>
                 </div>
                 
-                <div className="mb-1">
-                  <h4 className="text-[14px] font-semibold text-gray-900">{item.storeName}</h4>
-                  <p className="text-[11px] text-gray-400">{item.categoryLabel} • {item.postId}</p>
+                {/* Description Box */}
+                <div 
+                  className="px-3 py-2"
+                  style={{ backgroundColor: styles.cardBg }}
+                >
+                  <p className="text-[12px] text-gray-700">{item.description}</p>
                 </div>
-                
-                <p className="text-[13px] text-gray-600 leading-snug">{item.description}</p>
               </div>
             );
           })}
@@ -239,71 +276,72 @@ const ContentModerationSection = () => {
         {/* Right Column - Detail Panel */}
         <div className="flex-1 bg-white rounded-xl p-6 shadow-sm">
           {/* Header with severity badge */}
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex items-center gap-2">
               <span 
-                className="text-[10px] font-bold px-3 py-1 rounded uppercase"
-                style={{ backgroundColor: severityColors.bg, color: severityColors.text }}
+                className="text-[10px] font-bold px-3 py-1 rounded-full uppercase flex items-center gap-1"
+                style={{ backgroundColor: '#FEE2E2', color: '#DC2626' }}
               >
+                <span className="w-1.5 h-1.5 rounded-full bg-[#DC2626]"></span>
                 {selectedItem.severity} Severity
               </span>
-              <span className="text-[12px] text-gray-400 bg-gray-100 px-2 py-0.5 rounded">
+              <span className="text-[11px] text-gray-500 bg-gray-100 px-2 py-1 rounded">
                 {selectedItem.postId}
               </span>
             </div>
             <div className="text-right">
-              <div className="text-[28px] font-bold text-[#EF4444]">{selectedItem.reportCount}</div>
+              <div className="text-[32px] font-bold text-[#EF4444] leading-none">{selectedItem.reportCount}</div>
               <div className="text-[11px] text-gray-400">Reports</div>
-              <div className="text-[11px] text-gray-400">{selectedItem.date}</div>
+              <div className="text-[11px] text-gray-400 mt-1">{selectedItem.date}</div>
             </div>
           </div>
 
           {/* Store Info */}
-          <div className="mb-6">
+          <div className="mb-5">
             <h2 className="text-[18px] font-semibold text-gray-900 mb-1">{selectedItem.storeName}</h2>
-            <div className="flex items-center gap-2 text-[13px] text-gray-500">
-              <Flag className="w-4 h-4" />
+            <div className="flex items-center gap-1.5 text-[12px] text-gray-500">
+              <Flag className="w-3.5 h-3.5" />
               <span>{selectedItem.categoryLabel}</span>
             </div>
           </div>
 
           {/* Post Content */}
           <div className="mb-6">
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 mb-2">
               <div className="w-5 h-5 rounded-full bg-[#22C55E] flex items-center justify-center">
                 <Eye className="w-3 h-3 text-white" />
               </div>
-              <h3 className="text-[15px] font-semibold text-gray-900">Post Content</h3>
+              <h3 className="text-[14px] font-semibold text-gray-900">Post Content</h3>
             </div>
-            <div className="bg-gray-50 rounded-lg p-4">
-              <p className="text-[13px] text-gray-700">{selectedItem.postContent}</p>
+            <div className="bg-[#F9FAFB] rounded-lg p-4 border border-gray-100">
+              <p className="text-[13px] text-gray-600">{selectedItem.postContent}</p>
             </div>
           </div>
 
           {/* Moderation Actions */}
-          <div className="mb-4">
-            <h3 className="text-[15px] font-semibold text-gray-900 mb-4">Moderation Actions</h3>
+          <div>
+            <h3 className="text-[14px] font-semibold text-gray-900 mb-3">Moderation Actions</h3>
             
-            <div className="grid grid-cols-2 gap-3 mb-3">
-              <button className="flex items-center justify-center gap-2 bg-gray-100 text-gray-700 px-4 py-3 rounded-lg text-[13px] font-medium hover:bg-gray-200 transition-colors">
+            <div className="grid grid-cols-2 gap-2 mb-2">
+              <button className="flex items-center justify-center gap-2 bg-[#F3F4F6] text-gray-700 px-4 py-2.5 rounded-lg text-[12px] font-medium hover:bg-gray-200 transition-colors border border-gray-200">
                 <EyeOff className="w-4 h-4" />
                 Hide Post
               </button>
-              <button className="flex items-center justify-center gap-2 bg-[#EF4444] text-white px-4 py-3 rounded-lg text-[13px] font-medium hover:bg-[#DC2626] transition-colors">
+              <button className="flex items-center justify-center gap-2 bg-[#EF4444] text-white px-4 py-2.5 rounded-lg text-[12px] font-medium hover:bg-[#DC2626] transition-colors">
                 <Trash2 className="w-4 h-4" />
                 Remove Post
               </button>
-              <button className="flex items-center justify-center gap-2 bg-[#F59E0B] text-white px-4 py-3 rounded-lg text-[13px] font-medium hover:bg-[#D97706] transition-colors">
+              <button className="flex items-center justify-center gap-2 bg-[#F59E0B] text-white px-4 py-2.5 rounded-lg text-[12px] font-medium hover:bg-[#D97706] transition-colors">
                 <AlertTriangle className="w-4 h-4" />
                 Warn Vendor
               </button>
-              <button className="flex items-center justify-center gap-2 bg-gray-100 text-gray-700 px-4 py-3 rounded-lg text-[13px] font-medium hover:bg-gray-200 transition-colors">
+              <button className="flex items-center justify-center gap-2 bg-[#F3F4F6] text-gray-700 px-4 py-2.5 rounded-lg text-[12px] font-medium hover:bg-gray-200 transition-colors border border-gray-200">
                 <Shield className="w-4 h-4" />
                 Escalate Case
               </button>
             </div>
             
-            <button className="w-full flex items-center justify-center gap-2 bg-[#22C55E] text-white px-4 py-3 rounded-lg text-[13px] font-medium hover:bg-[#16A34A] transition-colors">
+            <button className="w-full flex items-center justify-center gap-2 bg-[#22C55E] text-white px-4 py-2.5 rounded-lg text-[12px] font-medium hover:bg-[#16A34A] transition-colors">
               <CheckCircle className="w-4 h-4" />
               Dismiss - No Violation
             </button>
