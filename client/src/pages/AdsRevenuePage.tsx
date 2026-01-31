@@ -124,7 +124,21 @@ const topAdSpenders: AdVendor[] = [
   { id: 8, vendor: "FoodieExpress", adSpend: "$8,200", impressions: "950K", ctr: "2.7%", performanceValue: 40, performanceLabel: "Below avg" },
 ];
 
+import { useQuery } from "@tanstack/react-query";
+
 export default function AdsRevenuePage() {
+  const { data: dynamicStats } = useQuery({
+    queryKey: ["/api/dashboard/stats"],
+  });
+
+  const displayStats = stats.map(stat => {
+    if (stat.title === "Active Campaigns") return { ...stat, value: dynamicStats?.activeCampaigns?.toString() || stat.value };
+    if (stat.title === "Average CTR") return { ...stat, value: dynamicStats?.avgCtr || stat.value };
+    if (stat.title === "Total Impressions") return { ...stat, value: dynamicStats?.totalImpressions || stat.value };
+    if (stat.title === "Revenue MTD") return { ...stat, value: dynamicStats?.revenueMtd || stat.value };
+    return stat;
+  });
+
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedVendor, setSelectedVendor] = useState<AdVendor | null>(null);
   const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
@@ -173,7 +187,7 @@ export default function AdsRevenuePage() {
         </header>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {stats.map((stat, i) => (
+          {displayStats.map((stat, i) => (
             <Card key={i} className="border-0 shadow-[0px_1px_2px_#0000000d] rounded-[15px] bg-white">
               <CardContent className="p-5 flex items-start justify-between h-full">
                 <div className="flex flex-col h-full justify-between gap-2">
