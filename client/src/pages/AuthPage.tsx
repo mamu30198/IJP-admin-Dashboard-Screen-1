@@ -1,18 +1,41 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
+import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function AuthPage() {
   const [, setLocation] = useLocation();
+  const { user, loginMutation } = useAuth();
+  const { toast } = useToast();
   const [showPassword, setShowPassword] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  if (user) {
+    setLocation("/");
+    return null;
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await loginMutation.mutateAsync({ username, password });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to login",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen w-full bg-[#002B20] flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Checkered Background Pattern */}
       <div className="absolute inset-0 opacity-10 pointer-events-none">
         <div className="grid grid-cols-8 md:grid-cols-12 lg:grid-cols-16 h-full w-full">
           {Array.from({ length: 192 }).map((_, i) => (
@@ -25,7 +48,6 @@ export default function AuthPage() {
       </div>
 
       <div className="w-full max-w-[480px] relative z-10 flex flex-col items-center">
-        {/* Logo */}
         <div className="mb-[-40px] z-20 relative">
           <div className="bg-white rounded-full p-4 shadow-xl border-4 border-[#002B20]">
             <img 
@@ -36,20 +58,21 @@ export default function AuthPage() {
           </div>
         </div>
 
-        {/* Login Card */}
         <div className="bg-white rounded-[32px] p-10 pt-16 w-full shadow-2xl">
           <h1 className="text-2xl font-semibold text-[#222F36] text-center mb-8">
             Login Administration
           </h1>
 
-          <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); setLocation("/"); }}>
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium text-[#7B848F]">
-                Email
+              <Label htmlFor="username" className="text-sm font-medium text-[#7B848F]">
+                Username
               </Label>
               <Input
-                id="email"
-                placeholder="Enter your email"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Enter your username"
                 className="h-12 bg-[#F8FAFC] border-none rounded-xl px-4 focus-visible:ring-1 focus-visible:ring-[#62A230]"
                 required
               />
@@ -63,6 +86,8 @@ export default function AuthPage() {
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="**********"
                   className="h-12 bg-[#F8FAFC] border-none rounded-xl px-4 pr-12 focus-visible:ring-1 focus-visible:ring-[#62A230]"
                   required
@@ -91,8 +116,10 @@ export default function AuthPage() {
 
             <Button 
               type="submit" 
+              disabled={loginMutation.isPending}
               className="w-full h-12 bg-[#62A230] hover:bg-[#4d8026] text-white rounded-xl text-base font-semibold transition-colors shadow-lg shadow-[#62A230]/20"
             >
+              {loginMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Sign In
             </Button>
           </form>
