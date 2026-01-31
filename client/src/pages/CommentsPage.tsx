@@ -3,6 +3,7 @@ import { Sidebar } from "@/components/Sidebar";
 import { Bell, ChevronDown, Settings, Search, Trash2, Clock, MessageCircle, TrendingUp, BarChart3, Users, User, ArrowUpRight, AlertTriangle, X } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
+import { cn } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -376,8 +377,8 @@ export default function CommentsPage() {
               <X className="w-5 h-5" />
             </button>
 
-            <DialogHeader className="mb-8">
-              <DialogTitle className="text-[28px] font-bold text-[#222f36]">
+            <DialogHeader className="mb-8 text-left">
+              <DialogTitle className="text-[28px] font-bold text-[#222f36] leading-tight">
                 Why Are You Deleting This Comment?
               </DialogTitle>
             </DialogHeader>
@@ -408,12 +409,15 @@ export default function CommentsPage() {
             <div className="mb-8">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-[15px] font-bold text-[#222f36]">Custom Reason</span>
-                <div className={cn(
-                  "w-5 h-5 rounded-full border-2 flex items-center justify-center",
-                  selectedReason === 'Custom' ? "border-[#62a230]" : "border-gray-200"
-                )}>
+                <button
+                  onClick={() => setSelectedReason('Custom')}
+                  className={cn(
+                    "w-5 h-5 rounded-full border-2 flex items-center justify-center",
+                    selectedReason === 'Custom' ? "border-[#62a230]" : "border-gray-200"
+                  )}
+                >
                   {selectedReason === 'Custom' && <div className="w-2.5 h-2.5 rounded-full bg-[#62a230]" />}
-                </div>
+                </button>
               </div>
               <textarea
                 placeholder="Write something"
