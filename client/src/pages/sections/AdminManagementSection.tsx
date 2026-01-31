@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bell, Settings, ChevronDown, Plus, Edit2, Shield, Headphones, DollarSign, FileCheck } from 'lucide-react';
+import { Bell, Settings, ChevronDown, Plus, Edit2, Shield, Headphones, DollarSign, FileCheck, Trash2 } from 'lucide-react';
 
 interface AdminUser {
   id: string;
@@ -292,9 +292,14 @@ const AdminManagementSection = () => {
                           </span>
                         </td>
                         <td className="px-4 py-3">
-                          <button className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded">
-                            <Edit2 className="w-4 h-4" />
-                          </button>
+                          <div className="flex items-center gap-2">
+                            <button className="p-1.5 text-[#62a230] hover:bg-[#62a230]/10 rounded transition-colors">
+                              <Edit2 className="w-4 h-4" />
+                            </button>
+                            <button className="p-1.5 text-[#ef4444] hover:bg-[#ef4444]/10 rounded transition-colors">
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     );
