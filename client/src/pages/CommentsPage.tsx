@@ -98,8 +98,8 @@ const comments = [
 
 export default function CommentsPage() {
   const [activeFilter, setActiveFilter] = useState('All User');
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [sureDialogOpen, setSureDialogOpen] = useState(false);
+  const [deleteReasonDialogOpen, setDeleteReasonDialogOpen] = useState(false);
+  const [confirmDeleteDialogOpen, setConfirmDeleteDialogOpen] = useState(false);
   const [selectedReason, setSelectedReason] = useState('Inappropriate Content');
   const [customReason, setCustomReason] = useState('');
   const [currentPage, setCurrentPage] = useState(2);
@@ -111,9 +111,14 @@ export default function CommentsPage() {
     'Inappropriate Content'
   ];
 
-  const handleSureSubmit = () => {
-    setSureDialogOpen(false);
-    setDeleteDialogOpen(true);
+  const handleReasonSubmit = () => {
+    setDeleteReasonDialogOpen(false);
+    setConfirmDeleteDialogOpen(true);
+  };
+
+  const handleFinalDelete = () => {
+    // Logic to delete comment
+    setConfirmDeleteDialogOpen(false);
   };
 
   return (
@@ -341,8 +346,8 @@ export default function CommentsPage() {
                     </td>
                     <td className="px-6 py-4 text-right">
                       <button 
-                        onClick={() => setSureDialogOpen(true)}
-                        className="p-2 text-gray-300 hover:text-[#ef4444] hover:bg-[#ef4444]/5 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                        onClick={() => setDeleteReasonDialogOpen(true)}
+                        className="p-2 text-[#ef4444] hover:bg-[#ef4444]/5 rounded-lg transition-all"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -391,47 +396,11 @@ export default function CommentsPage() {
           </div>
         </div>
 
-        {/* Sure Delete Dialog */}
-        <Dialog open={sureDialogOpen} onOpenChange={setSureDialogOpen}>
-          <DialogContent className="max-w-[550px] p-12 rounded-[24px] border-none gap-0">
-            <button 
-              onClick={() => setSureDialogOpen(false)}
-              className="absolute right-6 top-6 p-2 text-gray-400 hover:bg-gray-50 rounded-full transition-all"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="text-center">
-              <h2 className="text-[28px] font-bold text-[#222f36] mb-4">
-                Are you sure you want to delete this Comment ?
-              </h2>
-              <p className="text-[15px] text-[#7b848f] mb-10 leading-relaxed px-4">
-                Lorem ipsum dolor sit amet consectetur. In tincidunt a pellentesque gravida pellentesque suspendisse interdum. Pharetra risus non id auctor. Non tortor quis pretium placerat vestibulum convallis.
-              </p>
-
-              <div className="flex items-center gap-4">
-                <button 
-                  onClick={handleSureSubmit}
-                  className="flex-1 py-4 bg-[#62a230] text-white rounded-xl text-[16px] font-bold hover:bg-[#548a29] transition-all shadow-lg shadow-[#62a230]/20"
-                >
-                  Yes
-                </button>
-                <button 
-                  onClick={() => setSureDialogOpen(false)}
-                  className="flex-1 py-4 bg-[#F1F5F9] text-[#222f36] rounded-xl text-[16px] font-bold hover:bg-[#E2E8F0] transition-all"
-                >
-                  No
-                </button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
-
-        {/* Why Deleting Dialog (Step 2) */}
-        <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        {/* Step 1: Why Deleting Dialog */}
+        <Dialog open={deleteReasonDialogOpen} onOpenChange={setDeleteReasonDialogOpen}>
           <DialogContent className="max-w-[550px] p-10 rounded-[24px] border-none gap-0">
             <button 
-              onClick={() => setDeleteDialogOpen(false)}
+              onClick={() => setDeleteReasonDialogOpen(false)}
               className="absolute right-6 top-6 p-2 text-gray-400 hover:bg-gray-50 rounded-full transition-all"
             >
               <X className="w-5 h-5" />
@@ -490,12 +459,48 @@ export default function CommentsPage() {
 
             <DialogFooter>
               <button 
-                onClick={() => setDeleteDialogOpen(false)}
+                onClick={handleReasonSubmit}
                 className="w-full py-4 bg-[#62a230] text-white rounded-xl text-[15px] font-bold hover:bg-[#548a29] transition-all shadow-lg shadow-[#62a230]/20"
               >
                 Submit
               </button>
             </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Step 2: Confirm Delete Dialog */}
+        <Dialog open={confirmDeleteDialogOpen} onOpenChange={setConfirmDeleteDialogOpen}>
+          <DialogContent className="max-w-[550px] p-12 rounded-[24px] border-none gap-0">
+            <button 
+              onClick={() => setConfirmDeleteDialogOpen(false)}
+              className="absolute right-6 top-6 p-2 text-gray-400 hover:bg-gray-50 rounded-full transition-all"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="text-center">
+              <h2 className="text-[28px] font-bold text-[#222f36] mb-4">
+                Are you sure you want to delete this Comment?
+              </h2>
+              <p className="text-[15px] text-[#7b848f] mb-10 leading-relaxed px-4">
+                This action cannot be undone. The comment and all associated data will be permanently removed from our servers.
+              </p>
+
+              <div className="flex items-center gap-4">
+                <button 
+                  onClick={handleFinalDelete}
+                  className="flex-1 py-4 bg-[#62a230] text-white rounded-xl text-[16px] font-bold hover:bg-[#548a29] transition-all shadow-lg shadow-[#62a230]/20"
+                >
+                  Yes, Delete
+                </button>
+                <button 
+                  onClick={() => setConfirmDeleteDialogOpen(false)}
+                  className="flex-1 py-4 bg-[#F1F5F9] text-[#222f36] rounded-xl text-[16px] font-bold hover:bg-[#E2E8F0] transition-all"
+                >
+                  No, Keep It
+                </button>
+              </div>
+            </div>
           </DialogContent>
         </Dialog>
       </main>
