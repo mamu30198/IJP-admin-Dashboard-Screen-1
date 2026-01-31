@@ -86,7 +86,7 @@ export function Sidebar({ className, activeModule }: { className?: string; activ
                     className={cn(
                       "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group",
                       isActive
-                        ? "bg-[#21c45d] text-white font-medium"
+                        ? "bg-[#62a230] text-white font-medium"
                         : "text-white/60 hover:text-white hover:bg-white/5"
                     )}
                   >

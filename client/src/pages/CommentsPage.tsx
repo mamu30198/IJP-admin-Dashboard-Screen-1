@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Sidebar } from "@/components/Sidebar";
-import { Bell, ChevronDown, Settings, Search, Trash2, Clock, MessageCircle, TrendingUp, BarChart3, Users, User, ArrowUpRight } from 'lucide-react';
+import { Bell, ChevronDown, Settings, Search, Trash2, Clock, MessageCircle, TrendingUp, BarChart3, Users, User, ArrowUpRight, AlertTriangle } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
 
