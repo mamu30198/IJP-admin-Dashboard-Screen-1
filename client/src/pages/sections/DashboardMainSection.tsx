@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { CalendarIcon, SearchIcon, Bell, Settings as SettingsIcon } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import {
   Avatar,
   AvatarFallback,
@@ -46,92 +47,27 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const statsCards = [
-  {
-    title: "Total Users",
-    value: "15,234",
-    icon: "/figmaAssets/frame-1171275705.svg",
-  },
-  {
-    title: "Active Vendors",
-    value: "1,102",
-    icon: "/figmaAssets/frame-1171275704-1.svg",
-  },
-  {
-    title: "Monthly Revenue",
-    value: "$48,234",
-    icon: "/figmaAssets/frame-1171275704.svg",
-  },
-  {
-    title: "Moderation Tasks",
-    value: "142",
-    icon: "/figmaAssets/frame-1171275704-4.svg",
-  },
-  {
-    title: "Fraud Alerts",
-    value: "28",
-    icon: "/figmaAssets/frame-1171275704-2.svg",
-  },
-  {
-    title: "System Performance",
-    value: "99.9%",
-    icon: "/figmaAssets/frame-1171275704-3.svg",
-  },
-];
+const getActivityColor = (type: string) => {
+  switch (type) {
+    case "post": return "bg-[#10b5cb]";
+    case "user": return "bg-[#62a230]";
+    case "payment": return "bg-[#ffcc00]";
+    case "vendor": return "bg-[#9c27b0]";
+    case "report": return "bg-[#f44336]";
+    default: return "bg-[#10b5cb]";
+  }
+};
 
-const recentActivities = [
-  {
-    title: "New post created",
-    description: "John Doe created a new deal",
-    time: "2 min ago",
-    color: "bg-[#10b5cb]",
-  },
-  {
-    title: "New user registered",
-    description: "Jane Smith joined the platform",
-    time: "2 min ago",
-    color: "bg-[#62a230]",
-  },
-  {
-    title: "Payment received",
-    description: "John Doe created a new deal",
-    time: "2 min ago",
-    color: "bg-[#ffcc00]",
-  },
-  {
-    title: "New post created",
-    description: "John Doe created a new deal",
-    time: "2 min ago",
-    color: "bg-[#10b5cb]",
-  },
-  {
-    title: "New post created",
-    description: "John Doe created a new deal",
-    time: "2 min ago",
-    color: "bg-[#10b5cb]",
-  },
-];
-
-const salesData = [
-  { name: "2 Oct", value: 100 },
-  { name: "3 Oct", value: 120 },
-  { name: "4 Oct", value: 150 },
-  { name: "5 Oct", value: 130 },
-  { name: "6 Oct", value: 180 },
-  { name: "7 Oct", value: 160 },
-  { name: "8 Oct", value: 200 },
-  { name: "9 Oct", value: 190 },
-];
-
-const dauData = [
-  { name: "Dec 16", value: 120 },
-  { name: "Dec 18", value: 150 },
-  { name: "Dec 20", value: 140 },
-  { name: "Dec 22", value: 170 },
-  { name: "Dec 24", value: 160 },
-  { name: "Dec 26", value: 180 },
-  { name: "Dec 28", value: 175 },
-];
+const getTimeAgo = (date: string) => {
+  const now = new Date();
+  const past = new Date(date);
+  const diffMs = now.getTime() - past.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  if (diffMins < 60) return `${diffMins} min ago`;
+  const diffHours = Math.floor(diffMins / 60);
+  if (diffHours < 24) return `${diffHours} hr ago`;
+  return `${Math.floor(diffHours / 24)} days ago`;
+};
 
 const revenueData = [
   { name: "Subscriptions", value: 314000 },
@@ -159,6 +95,63 @@ export const DashboardMainSection = (): JSX.Element => {
     from: new Date(2025, 9, 2),
     to: new Date(2025, 9, 18),
   });
+
+  const { data: stats } = useQuery({
+    queryKey: ["/api/dashboard/stats"],
+    queryFn: async () => {
+      const res = await fetch("/api/dashboard/stats", { credentials: "include" });
+      if (!res.ok) return null;
+      return res.json();
+    },
+  });
+
+  const { data: activities } = useQuery({
+    queryKey: ["/api/dashboard/activities"],
+    queryFn: async () => {
+      const res = await fetch("/api/dashboard/activities", { credentials: "include" });
+      if (!res.ok) return [];
+      return res.json();
+    },
+  });
+
+  const { data: salesDataApi } = useQuery({
+    queryKey: ["/api/dashboard/sales"],
+    queryFn: async () => {
+      const res = await fetch("/api/dashboard/sales", { credentials: "include" });
+      if (!res.ok) return [];
+      return res.json();
+    },
+  });
+
+  const { data: dauDataApi } = useQuery({
+    queryKey: ["/api/dashboard/dau"],
+    queryFn: async () => {
+      const res = await fetch("/api/dashboard/dau", { credentials: "include" });
+      if (!res.ok) return [];
+      return res.json();
+    },
+  });
+
+  const statsCards = [
+    { title: "Total Users", value: stats?.totalUsers?.toLocaleString() || "15,234", icon: "/figmaAssets/frame-1171275705.svg" },
+    { title: "Active Vendors", value: stats?.activeVendors?.toLocaleString() || "1,102", icon: "/figmaAssets/frame-1171275704-1.svg" },
+    { title: "Monthly Revenue", value: `$${Number(stats?.monthlyRevenue || 48234).toLocaleString()}`, icon: "/figmaAssets/frame-1171275704.svg" },
+    { title: "Moderation Tasks", value: stats?.moderationTasks?.toString() || "142", icon: "/figmaAssets/frame-1171275704-4.svg" },
+    { title: "Fraud Alerts", value: stats?.fraudAlerts?.toString() || "28", icon: "/figmaAssets/frame-1171275704-2.svg" },
+    { title: "System Performance", value: `${stats?.systemPerformance || 99.9}%`, icon: "/figmaAssets/frame-1171275704-3.svg" },
+  ];
+
+  const salesData = salesDataApi?.length > 0 
+    ? salesDataApi.map((s: any) => ({ name: format(new Date(s.date), "d MMM"), value: Number(s.value) }))
+    : [{ name: "2 Oct", value: 100 }, { name: "3 Oct", value: 120 }, { name: "4 Oct", value: 150 }, { name: "5 Oct", value: 130 }, { name: "6 Oct", value: 180 }, { name: "7 Oct", value: 160 }, { name: "8 Oct", value: 200 }, { name: "9 Oct", value: 190 }];
+
+  const dauData = dauDataApi?.length > 0
+    ? dauDataApi.map((d: any) => ({ name: format(new Date(d.date), "MMM d"), value: d.count }))
+    : [{ name: "Dec 16", value: 120 }, { name: "Dec 18", value: 150 }, { name: "Dec 20", value: 140 }, { name: "Dec 22", value: 170 }, { name: "Dec 24", value: 160 }, { name: "Dec 26", value: 180 }, { name: "Dec 28", value: 175 }];
+
+  const recentActivities = activities?.length > 0
+    ? activities.map((a: any) => ({ title: a.title, description: a.description, time: getTimeAgo(a.createdAt), color: getActivityColor(a.type) }))
+    : [{ title: "New post created", description: "John Doe created a new deal", time: "2 min ago", color: "bg-[#10b5cb]" }];
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -346,7 +339,7 @@ export const DashboardMainSection = (): JSX.Element => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {recentActivities.map((activity, index) => (
+            {recentActivities.map((activity: { title: string; description: string; time: string; color: string }, index: number) => (
               <div
                 key={index}
                 className="flex items-center justify-between p-3 bg-[#f8fafc] rounded-xl group hover:bg-[#f1f5f9] transition-colors"
