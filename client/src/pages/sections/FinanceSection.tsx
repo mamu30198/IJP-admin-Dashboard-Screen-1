@@ -1,6 +1,7 @@
 import React from 'react';
 import { Search, Bell, Settings, ChevronDown, DollarSign, Users, TrendingUp, Wallet, ArrowUpRight, Download, MoreHorizontal } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { PermissionProfilePanel } from "@/components/PermissionProfilePanel";
 
 interface StatCardProps {
   icon: React.ElementType;
@@ -81,6 +82,13 @@ const transactionsData = [
 
 const FinanceSection = () => {
   const [currentPage, setCurrentPage] = React.useState(2);
+  const [isPanelOpen, setIsPanelOpen] = React.useState(false);
+  const [selectedTrx, setSelectedTrx] = React.useState<any>(null);
+
+  const handleRowClick = (trx: any) => {
+    setSelectedTrx(trx);
+    setIsPanelOpen(true);
+  };
 
   return (
     <div className="p-8 space-y-8 bg-[#F8FAFC]">
@@ -238,7 +246,11 @@ const FinanceSection = () => {
             </thead>
             <tbody className="divide-y divide-[#F1F5F9]">
               {transactionsData.map((trx) => (
-                <tr key={trx.id} className="hover:bg-[#F8FAFC] transition-colors group">
+                <tr 
+                  key={trx.id} 
+                  className="hover:bg-[#F8FAFC] transition-colors group cursor-pointer"
+                  onClick={() => handleRowClick(trx)}
+                >
                   <td className="px-8 py-5">
                     <div className="flex items-center gap-3">
                       <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${trx.user}`} className="w-9 h-9 rounded-full bg-gray-100" />
@@ -297,6 +309,12 @@ const FinanceSection = () => {
           </div>
         </div>
       </div>
+
+      <PermissionProfilePanel 
+        isOpen={isPanelOpen} 
+        onClose={() => setIsPanelOpen(false)} 
+        data={selectedTrx} 
+      />
     </div>
   );
 };
