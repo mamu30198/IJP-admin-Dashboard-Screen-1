@@ -66,18 +66,18 @@ export function setupAuth(app: Express) {
     }
   });
 
-  // Seed Admin User
+  // Seed Admin User with Email as Username per Figma
   (async () => {
-    const adminUsername = "admin";
+    const adminEmail = "admin@ijp.com";
     const adminPassword = "password123";
-    const existing = await storage.getUserByUsername(adminUsername);
+    const existing = await storage.getUserByUsername(adminEmail);
     if (!existing) {
       const hashedPassword = await hashPassword(adminPassword);
       await storage.createUser({
-        username: adminUsername,
+        username: adminEmail,
         password: hashedPassword,
       });
-      console.log(`Admin user created: ${adminUsername} / ${adminPassword}`);
+      console.log(`Admin user created: ${adminEmail} / ${adminPassword}`);
     }
   })();
 
