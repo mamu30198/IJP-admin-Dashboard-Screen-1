@@ -2,6 +2,14 @@ import React from 'react';
 import { Search, Bell, Settings, ChevronDown, DollarSign, Users, TrendingUp, Wallet, ArrowUpRight, Download, MoreHorizontal } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { PermissionProfilePanel } from "@/components/PermissionProfilePanel";
+import { EditPlanDialog } from "@/components/EditPlanDialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Edit2, Trash2 } from 'lucide-react';
 
 interface StatCardProps {
   icon: React.ElementType;
@@ -34,16 +42,31 @@ interface PlanCardProps {
   revenue: string;
   color: string;
   gradient: string;
+  onEdit: () => void;
 }
 
-const PlanCard = ({ type, price, transactions, revenue, color, gradient }: PlanCardProps) => (
+const PlanCard = ({ type, price, transactions, revenue, color, gradient, onEdit }: PlanCardProps) => (
   <div className={`p-8 rounded-[32px] relative overflow-hidden shadow-sm border border-gray-50 bg-gradient-to-br ${gradient}`}>
     <div className="relative z-10">
       <div className="flex justify-between items-center mb-6">
         <span className="text-sm font-bold text-gray-900 capitalize">{type} plan</span>
-        <button className="p-2 hover:bg-black/5 rounded-full transition-colors">
-          <MoreHorizontal className="w-5 h-5 text-gray-400" />
-        </button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="p-2 hover:bg-black/5 rounded-full transition-colors">
+              <MoreHorizontal className="w-5 h-5 text-gray-400" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="rounded-xl border-0 shadow-xl p-2 bg-white/95 backdrop-blur-sm min-w-[160px]">
+            <DropdownMenuItem onClick={onEdit} className="flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer hover:bg-gray-50 text-[13px] font-bold text-[#2D3748]">
+              <Edit2 className="w-4 h-4 text-gray-400" />
+              Edit Plan
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer hover:bg-red-50 text-red-500 text-[13px] font-bold">
+              <Trash2 className="w-4 h-4" />
+              Delete plan
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <div className="text-3xl font-bold text-gray-900 mb-8">{price}<span className="text-sm font-medium text-gray-400">/mth</span></div>
       
@@ -84,10 +107,17 @@ const FinanceSection = () => {
   const [currentPage, setCurrentPage] = React.useState(2);
   const [isPanelOpen, setIsPanelOpen] = React.useState(false);
   const [selectedTrx, setSelectedTrx] = React.useState<any>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false);
+  const [selectedPlan, setSelectedPlan] = React.useState<any>(null);
 
   const handleRowClick = (trx: any) => {
     setSelectedTrx(trx);
     setIsPanelOpen(true);
+  };
+
+  const handleEditPlan = (plan: any) => {
+    setSelectedPlan(plan);
+    setIsEditDialogOpen(true);
   };
 
   return (
@@ -214,9 +244,33 @@ const FinanceSection = () => {
 
       {/* Plans Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <PlanCard type="vendor" price="$150" transactions="42,000" revenue="$24,000" color="text-[#F59E0B]" gradient="from-[#FFFBEB] to-white" />
-        <PlanCard type="basic" price="$150" transactions="42,000" revenue="$24,000" color="text-[#22C55E]" gradient="from-[#F0FDF4] to-white" />
-        <PlanCard type="premium exclusive" price="$150" transactions="42,000" revenue="$24,000" color="text-[#8B5CF6]" gradient="from-[#F5F3FF] to-white" />
+        <PlanCard 
+          type="vendor" 
+          price="$150" 
+          transactions="42,000" 
+          revenue="$24,000" 
+          color="text-[#F59E0B]" 
+          gradient="from-[#FFFBEB] to-white" 
+          onEdit={() => handleEditPlan({ type: 'vendor', price: '$150' })}
+        />
+        <PlanCard 
+          type="basic" 
+          price="$150" 
+          transactions="42,000" 
+          revenue="$24,000" 
+          color="text-[#22C55E]" 
+          gradient="from-[#F0FDF4] to-white" 
+          onEdit={() => handleEditPlan({ type: 'basic', price: '$150' })}
+        />
+        <PlanCard 
+          type="premium exclusive" 
+          price="$150" 
+          transactions="42,000" 
+          revenue="$24,000" 
+          color="text-[#8B5CF6]" 
+          gradient="from-[#F5F3FF] to-white" 
+          onEdit={() => handleEditPlan({ type: 'premium exclusive', price: '$150' })}
+        />
       </div>
 
       {/* Recent Transactions */}
@@ -314,6 +368,12 @@ const FinanceSection = () => {
         isOpen={isPanelOpen} 
         onClose={() => setIsPanelOpen(false)} 
         data={selectedTrx} 
+      />
+
+      <EditPlanDialog
+        isOpen={isEditDialogOpen}
+        onClose={() => setIsEditDialogOpen(false)}
+        plan={selectedPlan}
       />
     </div>
   );
