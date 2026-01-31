@@ -126,8 +126,15 @@ const topAdSpenders: AdVendor[] = [
 
 import { useQuery } from "@tanstack/react-query";
 
+interface DashboardStats {
+  activeCampaigns: number;
+  avgCtr: string;
+  totalImpressions: string;
+  revenueMtd: string;
+}
+
 export default function AdsRevenuePage() {
-  const { data: dynamicStats } = useQuery({
+  const { data: dynamicStats } = useQuery<DashboardStats>({
     queryKey: ["/api/dashboard/stats"],
   });
 
