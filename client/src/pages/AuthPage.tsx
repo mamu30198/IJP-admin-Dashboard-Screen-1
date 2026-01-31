@@ -14,7 +14,6 @@ export default function AuthPage() {
   const { toast } = useToast();
   const [showPassword, setShowPassword] = useState(false);
   
-  // Pre-populated credentials per user request
   const [username, setUsername] = useState("admin@ijp.com");
   const [password, setPassword] = useState("password123");
 
@@ -29,17 +28,12 @@ export default function AuthPage() {
     try {
       await loginMutation.mutateAsync({ username, password });
     } catch (error: any) {
-      toast({
-        title: "Login Failed",
-        description: "Invalid email or password. Please try again.",
-        variant: "destructive",
-      });
+      // Errors handled by mutation onError, but we can add local logging
     }
   };
 
   return (
     <div className="min-h-screen w-full bg-[#002B20] flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Checkered Background Pattern */}
       <div className="absolute inset-0 opacity-10 pointer-events-none">
         <div className="grid grid-cols-8 md:grid-cols-12 lg:grid-cols-16 h-full w-full">
           {Array.from({ length: 192 }).map((_, i) => (
@@ -52,7 +46,6 @@ export default function AuthPage() {
       </div>
 
       <div className="w-full max-w-[480px] relative z-10 flex flex-col items-center">
-        {/* Logo */}
         <div className="mb-[-40px] z-20 relative">
           <div className="bg-white rounded-full p-4 shadow-xl border-4 border-[#002B20]">
             <img 
@@ -63,7 +56,6 @@ export default function AuthPage() {
           </div>
         </div>
 
-        {/* Login Card */}
         <div className="bg-white rounded-[32px] p-10 pt-16 w-full shadow-2xl">
           <h1 className="text-2xl font-semibold text-[#222F36] text-center mb-8">
             Login Administration

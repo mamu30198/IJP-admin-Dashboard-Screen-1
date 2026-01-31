@@ -27,8 +27,6 @@ export const dashboardStats = pgTable("dashboard_stats", {
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
-}).extend({
-  password: z.string().min(1), // Allow password123
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
