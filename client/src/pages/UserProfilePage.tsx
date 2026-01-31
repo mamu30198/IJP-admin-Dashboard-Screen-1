@@ -22,6 +22,7 @@ import { Switch } from "@/components/ui/switch";
 
 export default function UserProfilePage() {
   const [activeTab, setActiveTab] = useState("Notification Setting");
+  const [showOtp, setShowOtp] = useState(false);
 
   const [notifications, setNotifications] = useState({
     critical: true,
@@ -222,45 +223,84 @@ export default function UserProfilePage() {
               </div>
             ) : activeTab === "Change Password" ? (
               <div className="flex flex-col items-center py-10">
-                <div className="w-full max-w-[400px] space-y-8">
-                  <div className="text-center space-y-2 mb-10">
-                    <h3 className="text-2xl font-bold text-[#2D3748]">Change Password</h3>
-                    <p className="text-[13px] text-[#94A3B8] leading-relaxed">
-                      Lorem ipsum dolor sit amet consectetur. Fermentum metus eget eu lacus.
-                    </p>
-                  </div>
-
-                  <div className="space-y-6">
-                    <div className="space-y-3">
-                      <label className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider ml-1">Current Password *</label>
-                      <Input 
-                        type="password"
-                        placeholder="Current Password"
-                        className="h-14 bg-[#F8FAFC] border-0 rounded-2xl px-6 text-[15px] font-medium text-[#2D3748] focus-visible:ring-2 focus-visible:ring-[#72A840]/20"
-                      />
-                    </div>
-                    <div className="space-y-3">
-                      <label className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider ml-1">New Password</label>
-                      <Input 
-                        type="password"
-                        placeholder="New Password"
-                        className="h-14 bg-[#F8FAFC] border-0 rounded-2xl px-6 text-[15px] font-medium text-[#2D3748] focus-visible:ring-2 focus-visible:ring-[#72A840]/20"
-                      />
-                    </div>
-                    <div className="space-y-3">
-                      <label className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider ml-1">Confirm Password</label>
-                      <Input 
-                        type="password"
-                        placeholder="Confirm Password"
-                        className="h-14 bg-[#F8FAFC] border-0 rounded-2xl px-6 text-[15px] font-medium text-[#2D3748] focus-visible:ring-2 focus-visible:ring-[#72A840]/20"
-                      />
+                {!showOtp ? (
+                  <div className="w-full max-w-[400px] space-y-8">
+                    <div className="text-center space-y-2 mb-10">
+                      <h3 className="text-2xl font-bold text-[#2D3748]">Change Password</h3>
+                      <p className="text-[13px] text-[#94A3B8] leading-relaxed">
+                        Lorem ipsum dolor sit amet consectetur. Fermentum metus eget eu lacus.
+                      </p>
                     </div>
 
-                    <Button className="w-full bg-[#72A840] hover:bg-[#629235] text-white h-14 rounded-2xl text-lg font-bold shadow-lg shadow-[#72A840]/20 mt-4">
-                      Change
-                    </Button>
+                    <div className="space-y-6">
+                      <div className="space-y-3">
+                        <label className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider ml-1">Current Password *</label>
+                        <Input 
+                          type="password"
+                          placeholder="Current Password"
+                          className="h-14 bg-[#F8FAFC] border-0 rounded-2xl px-6 text-[15px] font-medium text-[#2D3748] focus-visible:ring-2 focus-visible:ring-[#72A840]/20"
+                        />
+                      </div>
+                      <div className="space-y-3">
+                        <label className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider ml-1">New Password</label>
+                        <Input 
+                          type="password"
+                          placeholder="New Password"
+                          className="h-14 bg-[#F8FAFC] border-0 rounded-2xl px-6 text-[15px] font-medium text-[#2D3748] focus-visible:ring-2 focus-visible:ring-[#72A840]/20"
+                        />
+                      </div>
+                      <div className="space-y-3">
+                        <label className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider ml-1">Confirm Password</label>
+                        <Input 
+                          type="password"
+                          placeholder="Confirm Password"
+                          className="h-14 bg-[#F8FAFC] border-0 rounded-2xl px-6 text-[15px] font-medium text-[#2D3748] focus-visible:ring-2 focus-visible:ring-[#72A840]/20"
+                        />
+                      </div>
+
+                      <Button 
+                        onClick={() => setShowOtp(true)}
+                        className="w-full bg-[#72A840] hover:bg-[#629235] text-white h-14 rounded-2xl text-lg font-bold shadow-lg shadow-[#72A840]/20 mt-4"
+                      >
+                        Change
+                      </Button>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="w-full max-w-[400px] space-y-8">
+                    <div className="text-center space-y-4 mb-10">
+                      <h3 className="text-3xl font-black text-[#2D3748]">Verification</h3>
+                      <p className="text-[13px] text-[#94A3B8] leading-relaxed max-w-[300px] mx-auto font-medium">
+                        Enter your OTP we just sent to your mobile phone number +91 **** ***834
+                      </p>
+                    </div>
+
+                    <div className="space-y-10 flex flex-col items-center">
+                      <div className="flex gap-4">
+                        {[1, 2, 3, 4].map((i) => (
+                          <input
+                            key={i}
+                            type="text"
+                            maxLength={1}
+                            className="w-14 h-14 bg-white border border-gray-100 rounded-2xl text-center text-xl font-bold text-[#2D3748] focus:ring-2 focus:ring-[#72A840]/20 outline-none shadow-sm"
+                          />
+                        ))}
+                      </div>
+
+                      <div className="w-full space-y-6">
+                        <Button className="w-full bg-[#72A840] hover:bg-[#629235] text-white h-14 rounded-2xl text-lg font-bold shadow-lg shadow-[#72A840]/20">
+                          Submit
+                        </Button>
+                        <button 
+                          onClick={() => setShowOtp(false)}
+                          className="w-full text-center text-[13px] font-bold text-[#94A3B8] hover:text-[#72A840] transition-colors"
+                        >
+                          Back
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : null}
           </div>
