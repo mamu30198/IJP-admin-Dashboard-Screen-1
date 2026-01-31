@@ -2,6 +2,8 @@ import {
   ChevronRightIcon,
   TrendingDownIcon,
   TrendingUpIcon,
+  ShieldCheck,
+  AlertTriangle,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,102 +13,79 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
 
-const highRiskVendors = [
-  {
-    name: "AutoLux Parts",
-    description: "Unusual discount patterns",
-    score: 72,
-    transactions: "124,580",
-  },
-  {
-    name: "TechGadgets Pro",
-    description: "Receipt format anomalies",
-    score: 68,
-    transactions: "89,420",
-  },
-  {
-    name: "FashionHub Elite",
-    description: "Rapid negative review increase",
-    score: 65,
-    transactions: "156,200",
-  },
-  {
-    name: "HomeDecor Plus",
-    description: "Payment dispute rate spike",
-    score: 61,
-    transactions: "45,890",
-  },
-];
+const getAlertStyles = (type: string) => {
+  switch (type) {
+    case "danger":
+      return {
+        emoji: "🔴",
+        borderColor: "border-[#ef4343]",
+        bgGradient: "bg-[linear-gradient(90deg,rgba(239,67,67,0.05)_0%,rgba(239,67,67,0)_100%)]",
+        titleColor: "text-[#ef4343]",
+      };
+    case "warning":
+      return {
+        emoji: "🟠",
+        borderColor: "border-[#f59f0a]",
+        bgGradient: "bg-[linear-gradient(90deg,rgba(245,159,10,0.05)_0%,rgba(245,159,10,0)_100%)]",
+        titleColor: "text-[#f59f0a]",
+      };
+    case "success":
+      return {
+        emoji: "🟢",
+        borderColor: "border-[#16a249]",
+        bgGradient: "bg-[linear-gradient(90deg,rgba(22,162,73,0.05)_0%,rgba(22,162,73,0)_100%)]",
+        titleColor: "text-[#16a249]",
+      };
+    default:
+      return {
+        emoji: "🔵",
+        borderColor: "border-[#3b82f6]",
+        bgGradient: "bg-[linear-gradient(90deg,rgba(59,130,246,0.05)_0%,rgba(59,130,246,0)_100%)]",
+        titleColor: "text-[#3b82f6]",
+      };
+  }
+};
 
-const aiAlerts = [
-  {
-    emoji: "🔴",
-    title: "Fraud Detection",
-    description: "Suspicious receipt patterns detected across 14 vendors",
-    confidence: "high confidence",
-    action: "View Vendors",
-    borderColor: "border-[#ef4343]",
-    bgGradient:
-      "bg-[linear-gradient(90deg,rgba(239,67,67,0.05)_0%,rgba(239,67,67,0)_100%)]",
-    titleColor: "text-[#ef4343]",
-  },
-  {
-    emoji: "🟠",
-    title: "Vendor Risk",
-    description: "Vendor 'AutoLux Parts' risk score increased to 72/100",
-    confidence: "medium confidence",
-    action: "Review Vendor",
-    borderColor: "border-[#f59f0a]",
-    bgGradient:
-      "bg-[linear-gradient(90deg,rgba(245,159,10,0.05)_0%,rgba(245,159,10,0)_100%)]",
-    titleColor: "text-[#f59f0a]",
-  },
-  {
-    emoji: "🟢",
-    title: "Revenue Intelligence",
-    description: "Raising posting fee by 5% could increase MRR by ~$24k",
-    confidence: "medium confidence",
-    action: "Simulate Pricing",
-    borderColor: "border-[#16a249]",
-    bgGradient:
-      "bg-[linear-gradient(90deg,rgba(22,162,73,0.05)_0%,rgba(22,162,73,0)_100%)]",
-    titleColor: "text-[#16a249]",
-  },
-];
-
-const platformMetrics = [
-  {
-    value: "$168K",
-    label: "Ads Revenue (MTD)",
-    percentage: "15%",
-    trend: "up",
-    gradient: "bg-gradient-to-br from-orange-400 to-orange-600",
-  },
-  {
-    value: "3.8M",
-    label: "Total Posts",
-    percentage: "5%",
-    trend: "up",
-    gradient: "bg-gradient-to-br from-emerald-400 to-emerald-600",
-  },
-  {
-    value: "$314K",
-    label: "Subscriptions Revenue",
-    percentage: "9%",
-    trend: "up",
-    gradient: "bg-gradient-to-br from-purple-500 to-purple-700",
-  },
-  {
-    value: "27",
-    label: "Fraud Alerts",
-    percentage: "23%",
-    trend: "down",
-    gradient: "bg-gradient-to-br from-red-500 to-red-700",
-  },
-];
+const getMetricGradient = (index: number) => {
+  const gradients = [
+    "bg-gradient-to-br from-orange-400 to-orange-600",
+    "bg-gradient-to-br from-emerald-400 to-emerald-600",
+    "bg-gradient-to-br from-purple-500 to-purple-700",
+    "bg-gradient-to-br from-red-500 to-red-700",
+  ];
+  return gradients[index % gradients.length];
+};
 
 export const AnalyticsSummarySection = (): JSX.Element => {
+  const { data: highRiskVendors = [] } = useQuery({
+    queryKey: ["/api/dashboard/high-risk-vendors"],
+    queryFn: async () => {
+      const res = await fetch("/api/dashboard/high-risk-vendors", { credentials: "include" });
+      if (!res.ok) return [];
+      return res.json();
+    },
+  });
+
+  const { data: aiAlerts = [] } = useQuery({
+    queryKey: ["/api/dashboard/ai-alerts"],
+    queryFn: async () => {
+      const res = await fetch("/api/dashboard/ai-alerts", { credentials: "include" });
+      if (!res.ok) return [];
+      return res.json();
+    },
+  });
+
+  const { data: platformMetrics = [] } = useQuery({
+    queryKey: ["/api/dashboard/platform-metrics"],
+    queryFn: async () => {
+      const res = await fetch("/api/dashboard/platform-metrics", { credentials: "include" });
+      if (!res.ok) return [];
+      return res.json();
+    },
+  });
+
   return (
     <div className="flex w-full items-start gap-6 relative flex-col xl:flex-row">
       <Card className="flex-1 w-full bg-white rounded-xl border border-solid border-[#e0ebe5]">
@@ -128,9 +107,9 @@ export const AnalyticsSummarySection = (): JSX.Element => {
           </Button>
         </CardHeader>
         <CardContent className="space-y-3">
-          {highRiskVendors.map((vendor, index) => (
+          {highRiskVendors.map((vendor: any, index: number) => (
             <div
-              key={index}
+              key={vendor.id || index}
               className="rounded-xl border border-solid border-[#ef43431a] bg-[#ef434305] p-4 flex items-center justify-between hover:bg-[#ef43430a] transition-colors"
             >
               <div className="flex flex-col gap-1">
@@ -143,7 +122,7 @@ export const AnalyticsSummarySection = (): JSX.Element => {
               </div>
               <div className="flex flex-col items-end gap-1">
                 <div className="font-bold text-[#ef4343] text-lg">
-                  {vendor.score}
+                  {vendor.riskScore}
                 </div>
                 <div className="text-[#677e77] text-xs">
                   {vendor.transactions}
@@ -173,34 +152,37 @@ export const AnalyticsSummarySection = (): JSX.Element => {
           </Button>
         </CardHeader>
         <CardContent className="space-y-3">
-          {aiAlerts.map((alert, index) => (
-            <div
-              key={index}
-              className={`rounded-xl border-l-4 ${alert.borderColor} ${alert.bgGradient} p-4 flex flex-col justify-between hover:brightness-95 transition-all`}
-            >
-              <div className="space-y-2">
-                <div className={`font-semibold ${alert.titleColor} text-sm`}>
-                  {alert.emoji} {alert.title}
+          {aiAlerts.map((alert: any, index: number) => {
+            const styles = getAlertStyles(alert.type);
+            return (
+              <div
+                key={alert.id || index}
+                className={`rounded-xl border-l-4 ${styles.borderColor} ${styles.bgGradient} p-4 flex flex-col justify-between hover:brightness-95 transition-all`}
+              >
+                <div className="space-y-2">
+                  <div className={`font-semibold ${styles.titleColor} text-sm`}>
+                    {styles.emoji} {alert.title}
+                  </div>
+                  <div className="font-medium text-[#12211c] text-sm">
+                    {alert.description}
+                  </div>
                 </div>
-                <div className="font-medium text-[#12211c] text-sm">
-                  {alert.description}
+                <div className="flex items-center justify-between mt-4">
+                  <div className="text-[#677e77] text-xs">
+                    {alert.confidence}
+                  </div>
+                  <Button
+                    variant="ghost"
+                    className="h-auto text-[#21c45d] hover:text-[#21c45d] hover:bg-transparent p-0"
+                  >
+                    <span className="text-xs font-semibold uppercase tracking-wider">
+                      {alert.action} →
+                    </span>
+                  </Button>
                 </div>
               </div>
-              <div className="flex items-center justify-between mt-4">
-                <div className="text-[#677e77] text-xs">
-                  {alert.confidence}
-                </div>
-                <Button
-                  variant="ghost"
-                  className="h-auto text-[#21c45d] hover:text-[#21c45d] hover:bg-transparent p-0"
-                >
-                  <span className="text-xs font-semibold uppercase tracking-wider">
-                    {alert.action} →
-                  </span>
-                </Button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </CardContent>
       </Card>
 
@@ -215,10 +197,10 @@ export const AnalyticsSummarySection = (): JSX.Element => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-4">
-            {platformMetrics.map((metric, index) => (
+            {platformMetrics.map((metric: any, index: number) => (
               <div
-                key={index}
-                className={`${metric.gradient} relative h-[140px] rounded-xl overflow-hidden p-4 flex flex-col justify-between shadow-sm hover:scale-[1.02] transition-transform`}
+                key={metric.id || index}
+                className={`${getMetricGradient(index)} relative h-[140px] rounded-xl overflow-hidden p-4 flex flex-col justify-between shadow-sm hover:scale-[1.02] transition-transform`}
               >
                 <div className="relative flex items-start justify-between">
                   <Badge className="bg-white/20 hover:bg-white/30 text-white border-0 h-6 px-2 gap-1 backdrop-blur-sm">
@@ -248,5 +230,3 @@ export const AnalyticsSummarySection = (): JSX.Element => {
     </div>
   );
 };
-
-import { ShieldCheck, AlertTriangle } from "lucide-react";

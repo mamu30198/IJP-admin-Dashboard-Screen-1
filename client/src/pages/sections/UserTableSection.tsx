@@ -29,6 +29,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
 
 const tableHeaders = [
   { label: "Name", className: "w-[191px]" },
@@ -42,142 +44,26 @@ const tableHeaders = [
   { label: "More", className: "w-[228px]" },
 ];
 
-const userData = [
-  {
-    name: "John Doe",
-    avatar: "/figmaAssets/ellipse-11.svg",
-    mobile: "+10895XXXX550",
-    city: "New York , USA,140050",
-    registration: "12 -17 oct ,2025",
-    followers: "50",
-    following: "20",
-    posts: "22",
-    completion: 60,
-    completionColor: "bg-[#5ca0ff]",
-  },
-  {
-    name: "John Doe",
-    avatar: "/figmaAssets/ellipse-11-7.svg",
-    mobile: "+10895XXXX550",
-    city: "New York , USA,140050",
-    registration: "12 -17 oct ,2025",
-    followers: "50",
-    following: "20",
-    posts: "22",
-    completion: 20,
-    completionColor: "bg-[#ff8e44]",
-  },
-  {
-    name: "John Doe",
-    avatar: "/figmaAssets/ellipse-11-5.svg",
-    mobile: "+10895XXXX550",
-    city: "New York , USA,140050",
-    registration: "12 -17 oct ,2025",
-    followers: "50",
-    following: "20",
-    posts: "22",
-    completion: 100,
-    completionColor: "bg-frame-4",
-  },
-  {
-    name: "John Doe",
-    avatar: "/figmaAssets/ellipse-11.svg",
-    mobile: "+10895XXXX550",
-    city: "New York , USA,140050",
-    registration: "12 -17 oct ,2025",
-    followers: "50",
-    following: "20",
-    posts: "22",
-    completion: 60,
-    completionColor: "bg-[#5ca0ff]",
-  },
-  {
-    name: "John Doe",
-    avatar: "/figmaAssets/ellipse-11.svg",
-    mobile: "+10895XXXX550",
-    city: "New York , USA,140050",
-    registration: "12 -17 oct ,2025",
-    followers: "50",
-    following: "20",
-    posts: "22",
-    completion: 60,
-    completionColor: "bg-[#5ca0ff]",
-  },
-  {
-    name: "John Doe",
-    avatar: "/figmaAssets/ellipse-11.svg",
-    mobile: "+10895XXXX550",
-    city: "New York , USA,140050",
-    registration: "12 -17 oct ,2025",
-    followers: "50",
-    following: "20",
-    posts: "22",
-    completion: 60,
-    completionColor: "bg-[#5ca0ff]",
-  },
-  {
-    name: "John Doe",
-    avatar: "/figmaAssets/ellipse-11.svg",
-    mobile: "+10895XXXX550",
-    city: "New York , USA,140050",
-    registration: "12 -17 oct ,2025",
-    followers: "50",
-    following: "20",
-    posts: "22",
-    completion: 60,
-    completionColor: "bg-[#5ca0ff]",
-  },
-  {
-    name: "John Doe",
-    avatar: "/figmaAssets/ellipse-11.svg",
-    mobile: "+10895XXXX550",
-    city: "New York , USA,140050",
-    registration: "12 -17 oct ,2025",
-    followers: "50",
-    following: "20",
-    posts: "22",
-    completion: 60,
-    completionColor: "bg-[#5ca0ff]",
-  },
-  {
-    name: "John Doe",
-    avatar: "/figmaAssets/ellipse-11.svg",
-    mobile: "+10895XXXX550",
-    city: "New York , USA,140050",
-    registration: "12 -17 oct ,2025",
-    followers: "50",
-    following: "20",
-    posts: "22",
-    completion: 60,
-    completionColor: "bg-[#5ca0ff]",
-  },
-  {
-    name: "John Doe",
-    avatar: "/figmaAssets/ellipse-11.svg",
-    mobile: "+10895XXXX550",
-    city: "New York , USA,140050",
-    registration: "12 -17 oct ,2025",
-    followers: "50",
-    following: "20",
-    posts: "22",
-    completion: 60,
-    completionColor: "bg-[#5ca0ff]",
-  },
-];
-
-const paginationPages = [
-  { number: "01", active: false },
-  { number: "02", active: true },
-  { number: "03", active: false },
-  { number: "04", active: false },
-  { number: "05", active: false },
-];
+const getCompletionColor = (completion: number) => {
+  if (completion >= 80) return "bg-[#62a230]";
+  if (completion >= 50) return "bg-[#5ca0ff]";
+  return "bg-[#ff8e44]";
+};
 
 export const UserTableSection = (): JSX.Element => {
   const { toast } = useToast();
-  const [currentPage, setCurrentPage] = useState(2);
+  const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
   const totalPages = 5;
+
+  const { data: platformUsers = [] } = useQuery({
+    queryKey: ["/api/dashboard/platform-users"],
+    queryFn: async () => {
+      const res = await fetch("/api/dashboard/platform-users", { credentials: "include" });
+      if (!res.ok) return [];
+      return res.json();
+    },
+  });
 
   const handleAction = (action: string, userName: string) => {
     toast({
@@ -187,7 +73,6 @@ export const UserTableSection = (): JSX.Element => {
   };
 
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentUsers = userData.slice(0, itemsPerPage);
 
   return (
     <section className="flex flex-col items-start w-full">
@@ -213,16 +98,16 @@ export const UserTableSection = (): JSX.Element => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {currentUsers.map((user, index) => (
+              {platformUsers.map((user: any, index: number) => (
                 <TableRow
-                  key={index}
+                  key={user.id || index}
                   className="border-b border-[#edf1f3] h-[63px]"
                 >
                   <TableCell className="py-[19px]">
                     <div className="flex items-center gap-1.5">
                       <Avatar className="w-[29px] h-[29px]">
-                        <AvatarImage src={user.avatar} alt={user.name} />
-                        <AvatarFallback>JD</AvatarFallback>
+                        <AvatarImage src={user.avatar || "/figmaAssets/ellipse-11.svg"} alt={user.name} />
+                        <AvatarFallback>{user.name?.substring(0, 2).toUpperCase()}</AvatarFallback>
                       </Avatar>
                       <span className="[font-family:'Poppins',Helvetica] font-normal text-rectangle-164 text-xs tracking-[-0.12px] leading-[16.8px]">
                         {user.name}
@@ -236,7 +121,7 @@ export const UserTableSection = (): JSX.Element => {
                     {user.city}
                   </TableCell>
                   <TableCell className="[font-family:'Poppins',Helvetica] font-normal text-rectangle-164 text-xs tracking-[-0.12px] leading-[16.8px]">
-                    {user.registration}
+                    {user.registrationDate ? format(new Date(user.registrationDate), "d MMM, yyyy") : "N/A"}
                   </TableCell>
                   <TableCell className="[font-family:'Poppins',Helvetica] font-medium text-rectangle-164 text-xs tracking-[-0.12px] leading-[16.8px]">
                     {user.followers}
@@ -251,14 +136,14 @@ export const UserTableSection = (): JSX.Element => {
                     <div className="flex items-center gap-[7.6px]">
                       <div className="relative w-[176.78px] h-[7.6px] bg-[#d9d9d957] rounded-[95.05px] overflow-hidden">
                         <div
-                          className={`h-2 ${user.completionColor} rounded-[95.05px]`}
+                          className={`h-2 ${getCompletionColor(user.profileCompletion)} rounded-[95.05px]`}
                           style={{
-                            width: `${(user.completion / 100) * 176.78}px`,
+                            width: `${(user.profileCompletion / 100) * 176.78}px`,
                           }}
                         />
                       </div>
                       <span className="[font-family:'Poppins',Helvetica] font-medium text-rectangle-164 text-[11.4px] tracking-[-0.11px] leading-[16.0px] whitespace-nowrap">
-                        {user.completion} %
+                        {user.profileCompletion} %
                       </span>
                     </div>
                   </TableCell>
@@ -295,7 +180,7 @@ export const UserTableSection = (): JSX.Element => {
 
       <footer className="flex items-center justify-between p-6 w-full bg-white rounded-b-[20px] border-t border-[#edf1f3]">
         <p className="opacity-70 [font-family:'Poppins',Helvetica] font-normal text-rectangle-164 text-sm tracking-[0] leading-[21px]">
-          Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, 100)} list in {currentPage} page
+          Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, platformUsers.length || 8)} of {platformUsers.length || 8} users
         </p>
 
         <nav className="flex items-center gap-1">
@@ -309,19 +194,19 @@ export const UserTableSection = (): JSX.Element => {
             <ChevronLeftIcon className="w-5 h-5" />
           </Button>
 
-          {paginationPages.map((page, index) => (
+          {[1, 2, 3, 4, 5].map((page) => (
             <Button
-              key={index}
+              key={page}
               variant="ghost"
-              onClick={() => setCurrentPage(index + 1)}
+              onClick={() => setCurrentPage(page)}
               className={cn(
                 "h-auto w-10 rounded-[190px] font-medium text-sm transition-all",
-                currentPage === index + 1
+                currentPage === page
                   ? "bg-frame-4 text-white hover:bg-frame-4 hover:text-white"
                   : "text-rectangle-165 hover:bg-transparent"
               )}
             >
-              {page.number}
+              {page.toString().padStart(2, '0')}
             </Button>
           ))}
 
