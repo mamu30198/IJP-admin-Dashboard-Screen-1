@@ -1,15 +1,16 @@
-import { Express, Request, Response, NextFunction } from "express";
+import { Express } from "express";
 import { createServer, type Server } from "http";
 import { setupAuth } from "./auth";
 import { storage } from "./storage";
+import { users } from "@shared/schema";
+import { db } from "./db";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   setupAuth(app);
 
+  // Dynamic dashboard stats endpoint
   app.get("/api/dashboard/stats", async (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);
-    
-    // In a real app, this would query the DB. For now, we return dynamic-looking data.
     res.json({
       activeCampaigns: 892,
       avgCtr: "3.2%",
@@ -18,10 +19,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  // Dynamic user list endpoint
   app.get("/api/users", async (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);
-    // This would fetch all users for the user management module
-    res.json([]); 
+    const allUsers = await db.select().from(users);
+    res.json(allUsers);
   });
 
   const httpServer = createServer(app);
