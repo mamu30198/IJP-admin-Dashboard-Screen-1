@@ -24,6 +24,7 @@ function Router() {
     <Switch>
       {/* Add pages below */}
       <Route path="/auth" component={AuthPage} />
+      <Route path="/profile" component={UserProfilePage} />
       <Route path="/users/:id" component={UserProfilePage} />
       <Route path="/users" component={UsersPage} />
       <Route path="/revenue" component={AdsRevenuePage} />
