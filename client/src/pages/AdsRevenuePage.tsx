@@ -137,7 +137,10 @@ export default function AdsRevenuePage() {
 
   return (
     <div className="flex bg-[#f5f6fa] w-full min-h-screen">
-      <Sidebar className="w-[280px] flex-shrink-0 sticky top-0" activeModule="Ads & Revenue" />
+      <Sidebar
+        className="w-[280px] flex-shrink-0 sticky top-0 h-screen"
+        activeModule="Ads & Revenue"
+      />
       
       <main className="flex-1 p-4 md:p-6 overflow-x-hidden space-y-6">
         <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">

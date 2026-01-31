@@ -123,8 +123,11 @@ export default function CommentsPage() {
 
   return (
     <div className="flex min-h-screen bg-[#F8FAFC]">
-      <Sidebar activeModule="Comments" />
-      
+      <Sidebar
+        className="w-[280px] flex-shrink-0 sticky top-0 h-screen"
+        activeModule="Comments"
+      />
+
       <main className="flex-grow p-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
