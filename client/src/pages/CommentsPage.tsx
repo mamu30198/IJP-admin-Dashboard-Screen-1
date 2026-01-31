@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
 import { Sidebar } from "@/components/Sidebar";
-import { Bell, ChevronDown, Settings, Search, Trash2, Clock, MessageCircle, TrendingUp, BarChart3, Users, User, ArrowUpRight, AlertTriangle } from 'lucide-react';
+import { Bell, ChevronDown, Settings, Search, Trash2, Clock, MessageCircle, TrendingUp, BarChart3, Users, User, ArrowUpRight, AlertTriangle, X } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 const sentimentData = [
   { name: 'Week 1', positive: 65, neutral: 25, negative: 10 },
@@ -89,6 +97,16 @@ const comments = [
 
 export default function CommentsPage() {
   const [activeFilter, setActiveFilter] = useState('All User');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selectedReason, setSelectedReason] = useState('Inappropriate Content');
+  const [customReason, setCustomReason] = useState('');
+
+  const reasons = [
+    'Inappropriate Content',
+    'Spam Content',
+    'Inappropriate Content', // Keeping duplicate as per Figma design
+    'Inappropriate Content'  // Keeping duplicate as per Figma design
+  ];
 
   return (
     <div className="flex min-h-screen bg-[#F8FAFC]">
@@ -314,7 +332,10 @@ export default function CommentsPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <button className="p-2 text-gray-300 hover:text-[#ef4444] hover:bg-[#ef4444]/5 rounded-lg transition-all opacity-0 group-hover:opacity-100">
+                      <button 
+                        onClick={() => setDeleteDialogOpen(true)}
+                        className="p-2 text-gray-300 hover:text-[#ef4444] hover:bg-[#ef4444]/5 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                      >
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </td>
@@ -344,6 +365,75 @@ export default function CommentsPage() {
             </div>
           </div>
         </div>
+
+        {/* Delete Confirmation Dialog */}
+        <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <DialogContent className="max-w-[550px] p-10 rounded-[24px] border-none gap-0">
+            <button 
+              onClick={() => setDeleteDialogOpen(false)}
+              className="absolute right-6 top-6 p-2 text-gray-400 hover:bg-gray-50 rounded-full transition-all"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <DialogHeader className="mb-8">
+              <DialogTitle className="text-[28px] font-bold text-[#222f36]">
+                Why Are You Deleting This Comment?
+              </DialogTitle>
+            </DialogHeader>
+
+            <div className="space-y-3 mb-6">
+              {reasons.map((reason, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedReason(reason)}
+                  className={cn(
+                    "w-full flex items-center justify-between p-4 rounded-xl border transition-all text-[15px] font-medium text-left",
+                    selectedReason === reason 
+                      ? "border-[#62a230] bg-[#62a230]/5 text-[#222f36]" 
+                      : "border-gray-100 text-[#7b848f] hover:border-gray-200"
+                  )}
+                >
+                  {reason}
+                  <div className={cn(
+                    "w-5 h-5 rounded-full border-2 flex items-center justify-center",
+                    selectedReason === reason ? "border-[#62a230]" : "border-gray-200"
+                  )}>
+                    {selectedReason === reason && <div className="w-2.5 h-2.5 rounded-full bg-[#62a230]" />}
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <div className="mb-8">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-[15px] font-bold text-[#222f36]">Custom Reason</span>
+                <div className={cn(
+                  "w-5 h-5 rounded-full border-2 flex items-center justify-center",
+                  selectedReason === 'Custom' ? "border-[#62a230]" : "border-gray-200"
+                )}>
+                  {selectedReason === 'Custom' && <div className="w-2.5 h-2.5 rounded-full bg-[#62a230]" />}
+                </div>
+              </div>
+              <textarea
+                placeholder="Write something"
+                value={customReason}
+                onFocus={() => setSelectedReason('Custom')}
+                onChange={(e) => setCustomReason(e.target.value)}
+                className="w-full h-24 p-4 rounded-xl border border-gray-100 text-[13px] focus:outline-none focus:ring-2 focus:ring-[#62a230]/10 focus:border-[#62a230] transition-all resize-none"
+              />
+            </div>
+
+            <DialogFooter>
+              <button 
+                onClick={() => setDeleteDialogOpen(false)}
+                className="w-full py-4 bg-[#62a230] text-white rounded-xl text-[15px] font-bold hover:bg-[#548a29] transition-all shadow-lg shadow-[#62a230]/20"
+              >
+                Submit
+              </button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </main>
     </div>
   );
