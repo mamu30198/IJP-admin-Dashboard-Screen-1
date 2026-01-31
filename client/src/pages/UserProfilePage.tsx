@@ -85,25 +85,23 @@ export default function UserProfilePage() {
 
         {/* Profile Banner Card */}
         <div className="bg-white rounded-[32px] overflow-hidden shadow-sm border border-gray-50">
-          <div className="relative h-[240px] bg-gradient-to-r from-[#22C55E] via-[#1eb054] to-[#22C55E]">
-            <div className="absolute inset-0 opacity-20" style={{
-              backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
-              backgroundSize: '32px 32px'
-            }} />
+          <div className="relative h-[200px] bg-[#62a230] overflow-hidden">
+            {/* Curved background elements */}
+            <div className="absolute top-0 left-0 w-full h-full opacity-30">
+              <div className="absolute top-[-50%] left-[-10%] w-[120%] h-[200%] rounded-[100%] border-[80px] border-white/20" />
+              <div className="absolute top-[-20%] right-[-20%] w-[100%] h-[150%] rounded-[100%] border-[60px] border-white/10" />
+            </div>
           </div>
-          <div className="px-10 pb-10 -mt-16 relative flex items-end gap-6">
-            <div className="relative group">
-              <Avatar className="w-40 h-40 border-[6px] border-white shadow-xl bg-white">
-                <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=Kevin" />
+          <div className="px-10 pb-6 -mt-20 relative flex items-end gap-6">
+            <div className="relative">
+              <Avatar className="w-44 h-44 border-[6px] border-white shadow-xl bg-white">
+                <AvatarImage src="/figmaAssets/2-jpg.png" />
                 <AvatarFallback>KA</AvatarFallback>
               </Avatar>
-              <button className="absolute bottom-2 right-2 p-2 bg-[#22C55E] text-white rounded-full shadow-lg hover:bg-[#1eb054] transition-all">
-                <Camera className="w-5 h-5" />
-              </button>
             </div>
-            <div className="pb-4">
-              <h2 className="text-3xl font-bold text-[#2D3748]">Kevin Gilbert</h2>
-              <p className="text-sm text-gray-400 font-medium mt-1 uppercase tracking-wider">Admin</p>
+            <div className="pb-6">
+              <h2 className="text-2xl font-bold text-[#2D3748]">Kevin Gilbert</h2>
+              <p className="text-[13px] text-gray-400 font-medium mt-0.5">Admin</p>
             </div>
           </div>
         </div>
