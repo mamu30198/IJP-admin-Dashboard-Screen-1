@@ -15,6 +15,7 @@ import ReportsPage from "@/pages/ReportsPage";
 import AlertsPage from "@/pages/AlertsPage";
 import AIIntelligencePage from "@/pages/AIIntelligencePage";
 import ContentModerationPage from "@/pages/ContentModerationPage";
+import AdminManagementPage from "@/pages/AdminManagementPage";
 
 function Router() {
   return (
@@ -29,6 +30,7 @@ function Router() {
       <Route path="/alerts" component={AlertsPage} />
       <Route path="/ai-intelligence" component={AIIntelligencePage} />
       <Route path="/moderation" component={ContentModerationPage} />
+      <Route path="/admin" component={AdminManagementPage} />
       <Route path="/" component={DashboardScreen} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />

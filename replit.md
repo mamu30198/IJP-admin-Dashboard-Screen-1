@@ -6,6 +6,15 @@ This is an admin dashboard application for managing users, vendors, posts, and r
 
 ## Recent Changes
 
+- **January 31, 2026**: Implemented Admin Management page matching Figma design with:
+  - Admin Users and Audit Logs tabs
+  - Admin users table with Name, Email, Role, Status, Last Active, 2FA, Actions
+  - Color-coded role badges (Super Admin, Support Admin, Finance Admin, Compliance Admin)
+  - Status indicators (Online/Away/Offline)
+  - 2FA enabled/disabled badges
+  - Roles & Permissions section with 4 role cards
+  - Add Admin button
+
 - **January 31, 2026**: Implemented Content Moderation page matching Figma design with:
   - Filter tabs (All, Fake Receipt, Spam, Scam, Abuse)
   - Flagged content cards with severity indicators (High/Medium/Low)
