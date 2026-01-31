@@ -6,6 +6,13 @@ This is an admin dashboard application for managing users, vendors, posts, and r
 
 ## Recent Changes
 
+- **January 31, 2026**: Implemented Content Moderation page matching Figma design with:
+  - Filter tabs (All, Fake Receipt, Spam, Scam, Abuse)
+  - Flagged content cards with severity indicators (High/Medium/Low)
+  - Store name, category, and report count display
+  - Detailed panel with Post Content and Moderation Actions
+  - Action buttons: Hide Post, Remove Post, Warn Vendor, Escalate Case, Dismiss
+
 - **January 30, 2026**: Implemented AI Intelligence Center page matching Figma design with:
   - Filter tabs (All Insights, Fraud & Abuse, Vendor Risk, Revenue, Platform Health, Moderation)
   - Alert cards list with color-coded categories and percentage indicators
