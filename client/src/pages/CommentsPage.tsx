@@ -99,15 +99,22 @@ const comments = [
 export default function CommentsPage() {
   const [activeFilter, setActiveFilter] = useState('All User');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [sureDialogOpen, setSureDialogOpen] = useState(false);
   const [selectedReason, setSelectedReason] = useState('Inappropriate Content');
   const [customReason, setCustomReason] = useState('');
+  const [currentPage, setCurrentPage] = useState(2);
 
   const reasons = [
     'Inappropriate Content',
     'Spam Content',
-    'Inappropriate Content', // Keeping duplicate as per Figma design
-    'Inappropriate Content'  // Keeping duplicate as per Figma design
+    'Inappropriate Content',
+    'Inappropriate Content'
   ];
+
+  const handleSureSubmit = () => {
+    setSureDialogOpen(false);
+    setDeleteDialogOpen(true);
+  };
 
   return (
     <div className="flex min-h-screen bg-[#F8FAFC]">
@@ -160,7 +167,7 @@ export default function CommentsPage() {
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={sentimentData}>
                     <defs>
-                      <linearGradient id="colorPositive" x1="0" y1="0" x2="0" y2="1">
+                      <linearGradient id="colorPositive" x1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor="#62a230" stopOpacity={0.1}/>
                         <stop offset="95%" stopColor="#62a230" stopOpacity={0}/>
                       </linearGradient>
@@ -334,7 +341,7 @@ export default function CommentsPage() {
                     </td>
                     <td className="px-6 py-4 text-right">
                       <button 
-                        onClick={() => setDeleteDialogOpen(true)}
+                        onClick={() => setSureDialogOpen(true)}
                         className="p-2 text-gray-300 hover:text-[#ef4444] hover:bg-[#ef4444]/5 rounded-lg transition-all opacity-0 group-hover:opacity-100"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -350,24 +357,77 @@ export default function CommentsPage() {
           <div className="flex items-center justify-between p-6 border-t border-gray-50 bg-[#F8FAFC]/30">
             <p className="text-[13px] font-bold text-[#7b848f]">Showing 1 to 100 list in 1 page</p>
             <div className="flex items-center gap-2">
-              <button className="p-2 text-gray-400 hover:text-[#222f36] disabled:opacity-30" disabled>
+              <button 
+                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                className="p-2 text-gray-400 hover:text-[#222f36] disabled:opacity-30" 
+                disabled={currentPage === 1}
+              >
                 <ChevronDown className="w-5 h-5 rotate-90" />
               </button>
               <div className="flex items-center gap-1">
-                <button className="w-8 h-8 rounded-full text-[13px] font-bold text-gray-400 hover:text-[#222f36]">01</button>
-                <button className="w-8 h-8 rounded-full text-[13px] font-bold bg-[#62a230] text-white shadow-md shadow-[#62a230]/20">02</button>
-                <button className="w-8 h-8 rounded-full text-[13px] font-bold text-gray-400 hover:text-[#222f36]">03</button>
-                <button className="w-8 h-8 rounded-full text-[13px] font-bold text-gray-400 hover:text-[#222f36]">04</button>
-                <button className="w-8 h-8 rounded-full text-[13px] font-bold text-gray-400 hover:text-[#222f36]">05</button>
+                {[1, 2, 3, 4, 5].map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={cn(
+                      "w-8 h-8 rounded-full text-[13px] font-bold transition-all",
+                      currentPage === page
+                        ? "bg-[#62a230] text-white shadow-md shadow-[#62a230]/20"
+                        : "text-gray-400 hover:text-[#222f36]"
+                    )}
+                  >
+                    {page.toString().padStart(2, '0')}
+                  </button>
+                ))}
               </div>
-              <button className="p-2 text-gray-400 hover:text-[#222f36]">
+              <button 
+                onClick={() => setCurrentPage(prev => Math.min(5, prev + 1))}
+                className="p-2 text-gray-400 hover:text-[#222f36] disabled:opacity-30"
+                disabled={currentPage === 5}
+              >
                 <ChevronDown className="w-5 h-5 -rotate-90" />
               </button>
             </div>
           </div>
         </div>
 
-        {/* Delete Confirmation Dialog */}
+        {/* Sure Delete Dialog */}
+        <Dialog open={sureDialogOpen} onOpenChange={setSureDialogOpen}>
+          <DialogContent className="max-w-[550px] p-12 rounded-[24px] border-none gap-0">
+            <button 
+              onClick={() => setSureDialogOpen(false)}
+              className="absolute right-6 top-6 p-2 text-gray-400 hover:bg-gray-50 rounded-full transition-all"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="text-center">
+              <h2 className="text-[28px] font-bold text-[#222f36] mb-4">
+                Are you sure you want to delete this Comment ?
+              </h2>
+              <p className="text-[15px] text-[#7b848f] mb-10 leading-relaxed px-4">
+                Lorem ipsum dolor sit amet consectetur. In tincidunt a pellentesque gravida pellentesque suspendisse interdum. Pharetra risus non id auctor. Non tortor quis pretium placerat vestibulum convallis.
+              </p>
+
+              <div className="flex items-center gap-4">
+                <button 
+                  onClick={handleSureSubmit}
+                  className="flex-1 py-4 bg-[#62a230] text-white rounded-xl text-[16px] font-bold hover:bg-[#548a29] transition-all shadow-lg shadow-[#62a230]/20"
+                >
+                  Yes
+                </button>
+                <button 
+                  onClick={() => setSureDialogOpen(false)}
+                  className="flex-1 py-4 bg-[#F1F5F9] text-[#222f36] rounded-xl text-[16px] font-bold hover:bg-[#E2E8F0] transition-all"
+                >
+                  No
+                </button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Why Deleting Dialog (Step 2) */}
         <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
           <DialogContent className="max-w-[550px] p-10 rounded-[24px] border-none gap-0">
             <button 
