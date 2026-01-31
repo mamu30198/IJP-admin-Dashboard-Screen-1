@@ -2,26 +2,19 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Express, Request } from "express";
 import session from "express-session";
-import { scrypt, randomBytes, timingSafeEqual } from "crypto";
-import { promisify } from "util";
+import bcrypt from "bcrypt";
 import { storage } from "./storage";
 import { User as SelectUser } from "@shared/schema";
 
-const scryptAsync = promisify(scrypt);
+const SALT_ROUNDS = 10;
 
-async function hashPassword(password: string) {
-  const salt = randomBytes(16).toString("hex");
-  const buf = (await scryptAsync(password, salt, 64)) as Buffer;
-  return `${buf.toString("hex")}.${salt}`;
+async function hashPassword(password: string): Promise<string> {
+  return bcrypt.hash(password, SALT_ROUNDS);
 }
 
-async function comparePasswords(supplied: string, stored: string) {
+async function comparePasswords(supplied: string, stored: string): Promise<boolean> {
   try {
-    const [hashed, salt] = stored.split(".");
-    if (!hashed || !salt) return false;
-    const hashedBuf = Buffer.from(hashed, "hex");
-    const suppliedBuf = (await scryptAsync(supplied, salt, 64)) as Buffer;
-    return timingSafeEqual(hashedBuf, suppliedBuf);
+    return await bcrypt.compare(supplied, stored);
   } catch (e) {
     return false;
   }
@@ -83,7 +76,7 @@ export function setupAuth(app: Express) {
     }
   });
 
-  // Re-seed Admin User with Email
+  // Seed Admin User with bcrypt password
   (async () => {
     try {
       const adminEmail = "admin@ijp.com";
@@ -98,10 +91,13 @@ export function setupAuth(app: Express) {
         });
         console.log(`SEED: Admin user created - ${adminEmail}`);
       } else {
-        // Re-hash password to ensure it matches the current seeding logic
-        const hashedPassword = await hashPassword(adminPassword);
-        // We'll update it directly using the storage layer or DB
-        // For simplicity and since we are in a dev loop, we'll just ensure it's seeded correctly on first run.
+        // Update password with bcrypt hash if it's not already bcrypt format
+        // bcrypt hashes start with $2b$ or $2a$
+        if (!existing.password.startsWith('$2')) {
+          const hashedPassword = await hashPassword(adminPassword);
+          await storage.updateUserPassword(existing.id, hashedPassword);
+          console.log(`SEED: Admin password updated to bcrypt - ${adminEmail}`);
+        }
       }
     } catch (e) {
       console.error("SEED Error:", e);
@@ -123,7 +119,8 @@ export function setupAuth(app: Express) {
 
       req.login(user, (err) => {
         if (err) return next(err);
-        res.status(201).json(user);
+        const { password: _, ...safeUser } = user;
+        res.status(201).json(safeUser);
       });
     } catch (err) {
       next(err);
@@ -136,7 +133,8 @@ export function setupAuth(app: Express) {
       if (!user) return res.status(401).send("Invalid email or password");
       req.login(user, (err) => {
         if (err) return next(err);
-        res.status(200).json(user);
+        const { password, ...safeUser } = user;
+        res.status(200).json(safeUser);
       });
     })(req, res, next);
   });
@@ -150,6 +148,7 @@ export function setupAuth(app: Express) {
 
   app.get("/api/user", (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);
-    res.json(req.user);
+    const { password, ...safeUser } = req.user!;
+    res.json(safeUser);
   });
 }
