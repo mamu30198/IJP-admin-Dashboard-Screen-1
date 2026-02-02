@@ -12,6 +12,7 @@ interface AlertItem {
   labelColor: string;
   cardBg: string;
   borderColor: string;
+  detailBg: string;
 }
 
 const alerts: AlertItem[] = [
@@ -25,7 +26,8 @@ const alerts: AlertItem[] = [
     dotColor: '#EF4444',
     labelColor: '#DC2626',
     cardBg: 'linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%)',
-    borderColor: '#EF4444'
+    borderColor: '#EF4444',
+    detailBg: '#FEF2F2'
   },
   {
     id: '2',
@@ -37,7 +39,8 @@ const alerts: AlertItem[] = [
     dotColor: '#F97316',
     labelColor: '#EA580C',
     cardBg: 'linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%)',
-    borderColor: '#F97316'
+    borderColor: '#F97316',
+    detailBg: '#FFF7ED'
   },
   {
     id: '3',
@@ -49,7 +52,8 @@ const alerts: AlertItem[] = [
     dotColor: '#84CC16',
     labelColor: '#65A30D',
     cardBg: 'linear-gradient(135deg, #FEFCE8 0%, #FEF9C3 100%)',
-    borderColor: '#84CC16'
+    borderColor: '#84CC16',
+    detailBg: '#FEFCE8'
   },
   {
     id: '4',
@@ -61,7 +65,8 @@ const alerts: AlertItem[] = [
     dotColor: '#3B82F6',
     labelColor: '#2563EB',
     cardBg: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)',
-    borderColor: '#3B82F6'
+    borderColor: '#3B82F6',
+    detailBg: '#EFF6FF'
   },
   {
     id: '5',
@@ -73,7 +78,8 @@ const alerts: AlertItem[] = [
     dotColor: '#EAB308',
     labelColor: '#CA8A04',
     cardBg: 'linear-gradient(135deg, #FEFCE8 0%, #FEF08A 100%)',
-    borderColor: '#EAB308'
+    borderColor: '#EAB308',
+    detailBg: '#FEFCE8'
   }
 ];
 
@@ -213,7 +219,10 @@ const AIIntelligenceSection = () => {
         </div>
 
         {/* Right Column - Detail Panel */}
-        <div className="flex-1 bg-white rounded-xl p-6 shadow-sm relative border border-gray-100">
+        <div 
+          className="flex-1 rounded-xl p-6 shadow-sm relative border border-gray-100/50"
+          style={{ backgroundColor: selectedAlert.detailBg }}
+        >
           {/* Zap Icon */}
           <button className="absolute top-5 right-5 text-[#22C55E] hover:text-[#16A34A]">
             <Zap className="w-5 h-5" fill="currentColor" />
